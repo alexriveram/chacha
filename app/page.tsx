@@ -6,7 +6,7 @@ import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/compo
 import {Dialog,DialogContent,DialogTitle,DialogDescription,DialogTrigger} from '@/components/ui/dialog';
 import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow} from '@/components/ui/table';
 import {RadioGroup,RadioGroupItem} from '@/components/ui/radio-group';
-import {ROSTER,FIGHTERS,TIERS,COSTS,TEAM_COLORS,TEAMS,TIER_COLORS,WORLDS,WORLD_SCENES,type Fighter,type Tier} from '@/lib/game/roster';
+import {ROSTER,FIGHTERS,TIERS,COSTS,TEAM_COLORS,TEAMS,TIER_COLORS,WORLDS,WORLD_SCENES,FIGHTER_SCENES,type Fighter,type Tier} from '@/lib/game/roster';
 import {MAPS} from '@/lib/game/maps';
 import {MAX_SCORE,MATCH_LENGTH,type Room,type Player} from '@/lib/game/engine';
 import {usePortraits} from './usePortraits';
@@ -40,7 +40,7 @@ async function quickPlay(){setBusy(true);setError('');try{const d=await request(
 async function leave(){await perform('leave');sessionStorage.removeItem('sekai-session');sessionRef.current=null;setSession(null);roomRef.current=null;setRoom(null);setViewRoster(false);setNetwork('');}
 function ability(a:string){controls.current.actions.push(a);sound(a==='ult'?'ult':'hit')}
 async function copy(){try{await navigator.clipboard.writeText(room!.code);setCopied(true);setTimeout(()=>setCopied(false),2000)}catch{setError(`Room code: ${room?.code}`)}}
-const list=ROSTER.filter(c=>(tier==='All'||c.tier===tier)&&(world==='All'||c.world===world)&&c.name.toLowerCase().includes(search.toLowerCase()));const chosenLocked=!!me&&COSTS[selected.tier]>me.bp;const previewScene=scene?.name||preview.world;
+const list=ROSTER.filter(c=>(tier==='All'||c.tier===tier)&&(world==='All'||c.world===world)&&c.name.toLowerCase().includes(search.toLowerCase()));const chosenLocked=!!me&&COSTS[selected.tier]>me.bp;const previewScene=FIGHTER_SCENES[preview.id]?.name||scene?.name||preview.world;
 return <main className={inMatch?'game-root':'launch'}>
 {inMatch&&session&&<Arena roomRef={roomRef} playerId={session.id} controls={controls} onError={showError}/>}
 {!inMatch&&<div className="world-backdrop atlas" style={{backgroundPosition:mapInfo.atlas}}/>}

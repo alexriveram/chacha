@@ -15,8 +15,8 @@ export function makeFighter(c:Fighter):T.Group{
  const g=new T.Group(),rig=new T.Group();g.add(rig);const kind=c.model;const metallic=['robot','armor','surfer','blades'].includes(kind);const skin=kind==='brute'?'#588e4c':kind==='yoda'?'#89a568':c.skin;const animal=['panda','leopard','lion','tiger','rat','monkey','fox','hedgehog','turtle','tortoise','bowser','ape','kaiju'].includes(kind);
  const thick=['brute','panda','ape','bowser','robot'].includes(kind)?1.35:1;
  const bare=['wrestler','fighter','boxer','brute','kratos','titan'].includes(kind);const bodyColor=bare?skin:c.color;
- const torso=ball(rig,0,1.08,0,.3,bodyColor,thick,.99,.58);const hip=sculpt(rig,0,.69,0,.39*thick,.22,.25,c.color);ball(rig,0,.88,0,.23,bodyColor,.82*thick,1,.66);
- for(const side of [-1,1]){ball(rig,side*.13*thick,1.17,.065,.17,bodyColor,1,.72,.66);for(let n=0;n<3;n++)ball(rig,side*.065,.91+n*.065,.137,.065,bodyColor,1,.7,.3)}
+ const torso=sculpt(rig,0,1.07,0,.61*thick,.63,.32,bodyColor);torso.scale.set(1,.98,.92);const chest=sculpt(rig,0,1.18,.145,.54*thick,.31,.055,bodyColor);chest.rotation.x=-.04;const waist=sculpt(rig,0,.82,0,.40*thick,.25,.27,bodyColor);const hip=sculpt(rig,0,.67,0,.43*thick,.22,.29,c.color);
+ for(const side of [-1,1]){ball(rig,side*.22*thick,1.18,.01,.135,bodyColor,1,.92,.92);sculpt(rig,side*.12*thick,.98,.164,.17,.25,.035,bodyColor).rotation.z=side*.05}
  cylinder(rig,0,1.43,0,.075,.10,.16,skin);
  const legs:T.Group[]=[],arms:T.Group[]=[];
  for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.13*thick,.66,0);const legColor=bare?skin:c.color;
@@ -24,8 +24,8 @@ export function makeFighter(c:Fighter):T.Group{
  sculpt(leg,side*.02,-.53,.055,.155*thick,.13,.26,['plumber','hedgehog'].includes(kind)?kind==='hedgehog'?c.accent:'#392c29':c.accent);rig.add(leg);legs.push(leg);
  const arm=new T.Group();arm.position.set(side*.29*thick,1.26,0);const armColor=bare?skin:c.color;ball(arm,0,-.035,0,.118*thick,armColor,1,1.15,1);limb(arm,new T.Vector3(0,-.04,0),new T.Vector3(side*.04,-.235,.015),.093*thick,.063*thick,armColor);ball(arm,side*.04,-.235,.015,.066*thick,armColor);limb(arm,new T.Vector3(side*.04,-.235,.015),new T.Vector3(side*.035,-.41,.055),.066*thick,.049*thick,armColor);
  sculpt(arm,side*.035,-.425,.057,.13*thick,.08,.14,c.accent,metallic?.6:0);const handColor=kind==='boxer'?c.accent:metallic?c.accent:skin;ball(arm,side*.035,-.48,.06,.071*thick,handColor,.8,1.2,.66);for(let f=0;f<4;f++)ball(arm,side*.035+(f-1.5)*.025,-.52,.08,.016,handColor,.65,1.9,.8);ball(arm,side*.035-side*.065,-.48,.1,.022,handColor,.8,1.5,.8);rig.add(arm);arms.push(arm)}
- const head=ball(rig,0,1.60,0,.175,animal?kind==='panda'?'#f4eee3':c.color:metallic?c.color:skin,1,1.20,.89);
- if(!animal&&!metallic&&!['mask','spider','vader','bat','maul','helmet'].includes(kind)){ball(rig,0,1.51,.032,.123,skin,.9,.69,.83);for(const side of [-1,1]){ball(rig,side*.172,1.59,0,.038,skin,.48,1,.72);ball(rig,side*.07,1.628,.139,.038,'#f4eee8',1,.42,.2);ball(rig,side*.07,1.628,.147,.017,'#425e70',.7,1,.35);sculpt(rig,side*.071,1.668,.142,.071,.016,.022,'#3a2d2b');}ball(rig,0,1.584,.159,.026,skin,.64,1.3,1.4);sculpt(rig,0,1.527,.143,.07,.011,.015,'#9b6962');}
+ const head=ball(rig,0,1.61,0,.158,animal?kind==='panda'?'#f4eee3':c.color:metallic?c.color:skin,.94,1.18,.86);
+ if(!animal&&!metallic&&!['mask','spider','vader','bat','maul','helmet'].includes(kind)){ball(rig,0,1.515,.026,.111,skin,.82,.70,.78);for(const side of [-1,1]){ball(rig,side*.151,1.60,0,.031,skin,.45,1,.66);ball(rig,side*.061,1.626,.134,.032,'#f5f1ec',1,.36,.16);ball(rig,side*.061,1.626,.142,.013,'#425e70',.72,1,.35);sculpt(rig,side*.061,1.659,.136,.065,.012,.018,'#3a2d2b');}ball(rig,0,1.585,.151,.022,skin,.55,1.45,1.25);sculpt(rig,0,1.535,.139,.061,.009,.013,'#8e5c59');sculpt(rig,0,1.49,.095,.19,.055,.09,skin);}
  const eyeColor=['vader','robot','armor','mask','spider','bat'].includes(kind)?'#b9f5ff':'#17202b';for(const side of [-1,1])box(rig,side*.066,1.63,.155,.054,.025,.015,eyeColor);
  box(rig,0,.78,.188,.40*thick,.045,.025,c.accent,metallic?.8:0);
  if(['cape','mustachecape','bat','vader','blondcape','scout','firelord','helmet'].includes(kind))cape(rig,c.accent);
