@@ -2,7 +2,7 @@ import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {type Fighter} from './roster';
 const mats=new Map<string,T.MeshStandardMaterial>();
-export function mat(color:string,metal=0,emission=0){const key=color+metal+emission;if(!mats.has(key))mats.set(key,new T.MeshStandardMaterial({color,roughness:metal?.38:.8,metalness:metal,emissive:color,emissiveIntensity:emission}));return mats.get(key)!}
+export function mat(color:string,metal=0,emission=0){const key=color+metal+emission;if(!mats.has(key)){const material=new T.MeshPhysicalMaterial({color,roughness:metal?.28:.67,metalness:metal,emissive:color,emissiveIntensity:emission,clearcoat:metal?.72:.08,clearcoatRoughness:metal?.12:.55,sheen:metal?0:.16,sheenColor:new T.Color(color).offsetHSL(0,0,.12)});mats.set(key,material)}return mats.get(key)!}
 export function box(g:T.Object3D,x:number,y:number,z:number,w:number,h:number,d:number,c:string,metal=0){const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat(c,metal));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m}
 export function ball(g:T.Object3D,x:number,y:number,z:number,r:number,c:string,sx=1,sy=1,sz=1){const m=new T.Mesh(new T.SphereGeometry(r,24,18),mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;g.add(m);return m}
 export function cylinder(g:T.Object3D,x:number,y:number,z:number,r1:number,r2:number,h:number,c:string){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),mat(c));m.position.set(x,y,z);m.castShadow=true;g.add(m);return m}
@@ -73,6 +73,13 @@ export function makeFighter(c:Fighter):T.Group{
  if(kind==='leopard'||kind==='tiger'){for(let side of [-1,1])for(let j=0;j<12;j++){const y=.83+(j%6)*.055;ball(rig,side*(.10+(j%3)*.047),y,.17,.020,'#333748',1.2,.75,.28)}for(let side of [-1,1]){ball(rig,side*.075,1.64,.164,.041,'#f7cf61',1,.42,.22);ball(rig,side*.075,1.64,.174,.014,'#24212b',.6,1,.3)}const tail=new T.CatmullRomCurve3([new T.Vector3(0,.70,-.14),new T.Vector3(.18,.55,-.5),new T.Vector3(.40,.62,-.65),new T.Vector3(.43,.9,-.65)]);rig.add(new T.Mesh(new T.TubeGeometry(tail,20,.052,8,false),mat(c.color)));}
  if(kind==='robot'){for(let side of [-1,1]){for(let j=0;j<4;j++)sculpt(rig,side*.16,.80+j*.06,.19,.20,.029,.03,'#78899a',.8);cylinder(rig,side*.39,1.48,-.09,.045,.045,.40,'#a5b3c2');for(let j=0;j<3;j++)sculpt(legs[side<0?0:1],0,-.1-j*.10,.085,.16,.07,.04,c.accent,.7)}}
  if(kind==='turtle'){for(let j=0;j<3;j++){const y=.82+j*.16;sculpt(rig,0,y,.297,.36,.013,.009,'#8e794c')}sculpt(rig,0,.75,.21,.43,.055,.04,'#6c4c35');for(let side of [-1,1]){sculpt(arms[side<0?0:1],side*.04,-.24,.068,.145,.09,.06,c.accent);sculpt(legs[side<0?0:1],0,-.25,.08,.16,.10,.04,c.accent)}}
+ if(!animal&&!metallic&&!bare){sculpt(rig,0,1.355,.105,.33,.095,.16,bodyColor);sculpt(rig,0,1.075,.177,.018,.48,.02,c.accent);for(const side of [-1,1]){sculpt(rig,side*.285*thick,1.17,.025,.055,.22,.25,bodyColor);sculpt(legs[side<0?0:1],0,-.27,.058,.145,.095,.19,c.accent);sculpt(arms[side<0?0:1],side*.038,-.24,.04,.10,.075,.12,c.accent)}}
+ for(const side of [-1,1]){sculpt(legs[side<0?0:1],side*.02,-.585,.09,.17*thick,.035,.27,'#171922');sculpt(arms[side<0?0:1],side*.035,-.365,.058,.115*thick,.018,.13,new T.Color(c.accent).offsetHSL(0,0,-.12).getStyle())}
+ sculpt(rig,0,.72,.174,.42*thick,.075,.06,new T.Color(c.accent).offsetHSL(0,0,-.15).getStyle());sculpt(rig,0,.72,.215,.09,.105,.035,metallic?'#d8e2eb':'#8f754f',metallic?.8:0);
+ if(c.name==='Naruto'){for(const side of [-1,1])for(let j=0;j<3;j++){const mark=sculpt(rig,side*.105,1.56-j*.022,.148,.075,.007,.009,'#7e584c');mark.rotation.z=side*(.18-j*.08)}}
+ if(c.name==='Gojo'){sculpt(rig,0,1.39,.03,.34,.25,.27,'#0d1422');for(const side of [-1,1])sculpt(rig,side*.16,1.22,.166,.11,.025,.025,'#26344c')}
+ if(c.name==='Spider-Man'){for(const side of [-1,1]){const stripe=sculpt(rig,side*.17,1.03,.174,.015,.46,.016,'#101a29');stripe.rotation.z=side*.18}}
+ if(c.name==='Iron Man'){for(const side of [-1,1]){sculpt(rig,side*.20,1.22,.19,.15,.07,.035,'#e1b74e',.75);sculpt(legs[side<0?0:1],0,-.20,.12,.14,.22,.055,'#d6aa43',.7)}}
  if(c.name==='Po')hip.scale.x=1.4;
  g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }

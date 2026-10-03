@@ -4,3 +4,4 @@
 .launch:has(.map-hover-world[data-active="shibuya"]) .map-hover-world{filter:saturate(1.22) contrast(1.06)}.launch:has(.map-hover-world[data-active="deathstar"]) .map-hover-world{filter:saturate(.8) contrast(1.15)}.launch:has(.map-hover-world[data-active="leaf"]) .map-hover-world{filter:saturate(1.08) brightness(1.03)}
 @media(max-width:820px),(pointer:coarse){.map-hover-world{display:none}.launch:has(.map-hover-world[data-active]){background:inherit}}
 @media(prefers-reduced-motion:reduce){.map-hover-world{transition:none}.hero-stage{transition:none!important}}
+.atlas{background-image:url('/arena-atlas-v2.png')!important}
