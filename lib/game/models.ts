@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {type Fighter} from './roster';
+import {addPaintedFace} from './faces';
 const mats=new Map<string,T.MeshStandardMaterial>();
 export function mat(color:string,metal=0,emission=0){const key=color+metal+emission;if(!mats.has(key)){const material=new T.MeshPhysicalMaterial({color,roughness:metal?.28:.67,metalness:metal,emissive:color,emissiveIntensity:emission,clearcoat:metal?.72:.08,clearcoatRoughness:metal?.12:.55,sheen:metal?0:.16,sheenColor:new T.Color(color).offsetHSL(0,0,.12)});mats.set(key,material)}return mats.get(key)!}
 export function box(g:T.Object3D,x:number,y:number,z:number,w:number,h:number,d:number,c:string,metal=0){const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat(c,metal));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m}
@@ -30,7 +31,7 @@ function makeOogway(c:Fighter){
  const smile=new T.Mesh(new T.TorusGeometry(.087,.009,8,24,Math.PI),mat('#6a4736'));smile.position.set(0,1.675,.355);smile.rotation.z=Math.PI;rig.add(smile);
  for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.16,.69,0);limb(leg,new T.Vector3(0,0,0),new T.Vector3(side*.015,-.28,.035),.095,.062,'#aaa071');ball(leg,side*.015,-.34,.10,.095,'#aaa071',1.1,.45,1.75);rig.add(leg);legs.push(leg);const arm=new T.Group();arm.position.set(side*.31,1.23,.02);limb(arm,new T.Vector3(0,0,0),new T.Vector3(side*.03,-.33,.08),.095,.052,'#aaa071');ball(arm,side*.03,-.39,.12,.075,'#aaa071',1,.72,1.3);for(let f=0;f<3;f++)ball(arm,side*.03+(f-1)*.035,-.43,.155,.024,'#aaa071',.65,1.8,.7);rig.add(arm);arms.push(arm)}
  const staff=cylinder(rig,.48,1.05,.15,.027,.038,1.72,'#6e4529');staff.rotation.z=-.09;const crook=new T.Mesh(new T.TorusGeometry(.105,.027,8,18,Math.PI*1.35),mat('#6e4529'));crook.position.set(.405,1.91,.15);crook.rotation.z=-.55;rig.add(crook);
- g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+ addPaintedFace(rig,c);g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
 function makeOptimus(c:Fighter){
  const g=new T.Group(),rig=new T.Group();g.add(rig);const legs:T.Group[]=[],arms:T.Group[]=[];
@@ -41,7 +42,7 @@ function makeOptimus(c:Fighter){
  for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.18,.66,0);sculpt(leg,0,-.19,0,.27,.42,.3,'#31569c',.72);sculpt(leg,0,-.43,.04,.31,.24,.37,'#294b89',.72);for(let j=0;j<3;j++)detailPlane(leg,0,-.25-j*.055,.16,.19,.022,'#7790aa',.9);sculpt(leg,0,-.58,.09,.34,.16,.5,'#244679',.75);rig.add(leg);legs.push(leg);
  const arm=new T.Group();arm.position.set(side*.46,1.3,0);sculpt(arm,0,-.04,0,.34,.30,.38,'#c43238',.72);sculpt(arm,side*.015,-.30,.015,.25,.34,.29,'#bd3035',.72);sculpt(arm,side*.02,-.51,.07,.22,.18,.30,'#31569c',.72);for(let f=0;f<4;f++)sculpt(arm,side*(f-1.5)*.035,-.61,.14,.045,.13,.055,'#8796a7',.85);rig.add(arm);arms.push(arm)}
  sculpt(rig,0,1.62,0,.36,.35,.32,'#31569c',.8);sculpt(rig,0,1.66,.18,.28,.22,.05,'#aab6c2',.9);detailPlane(rig,0,1.61,.216,.18,.06,'#232b35',.7);for(const side of [-1,1]){detailPlane(rig,side*.072,1.69,.216,.10,.042,'#83efff',.75);const antenna=sculpt(rig,side*.20,1.81,0,.045,.36,.07,'#31569c',.8);antenna.rotation.z=side*.12;sculpt(rig,side*.32,1.42,-.12,.08,.49,.09,'#c7cdd3',.9)}
- const head=rig.children[rig.children.length-5] as T.Object3D;g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+ const head=rig.children[rig.children.length-5] as T.Object3D;addPaintedFace(rig,c);g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
 export function makeFighter(c:Fighter):T.Group{
  if(c.name==='Oogway')return makeOogway(c);
@@ -115,7 +116,7 @@ export function makeFighter(c:Fighter):T.Group{
  if(c.name==='Spider-Man'){for(const side of [-1,1]){const stripe=sculpt(rig,side*.17,1.03,.174,.015,.46,.016,'#101a29');stripe.rotation.z=side*.18}}
  if(c.name==='Iron Man'){for(const side of [-1,1]){sculpt(rig,side*.20,1.22,.19,.15,.07,.035,'#e1b74e',.75);sculpt(legs[side<0?0:1],0,-.20,.12,.14,.22,.055,'#d6aa43',.7)}}
  if(c.name==='Po')hip.scale.x=1.4;
- g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+ addPaintedFace(rig,c);g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
 // Lightweight match LOD. The collection uses makeFighter; remote combatants use
 // this small rig because their screen-space details are only a few pixels wide.
@@ -134,6 +135,6 @@ export function makeCombatFighter(c:Fighter):T.Group{
  if(c.model==='blindfold'){const band=mesh(new T.BoxGeometry(.30,.065,.06),'#0b0e17');band.position.set(0,1.63,.125)}
  if(c.model==='robot'){const glass=mesh(new T.BoxGeometry(.48,.14,.04),'#78ddf1',.65);glass.position.set(0,1.23,.22);const grille=mesh(new T.BoxGeometry(.28,.19,.04),'#c7cdd3',.8);grille.position.set(0,1.03,.23)}
  if(c.model==='tortoise'){const neck=mesh(new T.CapsuleGeometry(.08,.27,3,7),'#afa479');neck.position.set(0,1.44,.02);const shell=mesh(new T.SphereGeometry(.34,12,8),'#514a37');shell.position.set(0,1,-.18);shell.scale.set(.92,1.1,.45)}
- g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+ addPaintedFace(rig,c,true);g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
 export function animateFighter(g:T.Group,time:number,moving:number,attack=false,flying=false){const {rig,legs,arms}=g.userData;if(!rig)return;const stride=Math.sin(time*10)*.65*moving;legs[0].rotation.x=stride;legs[1].rotation.x=-stride;arms[0].rotation.x=flying?-1.1:-stride*.8;arms[1].rotation.x=attack?-1.5:flying?-1.1:stride*.8;rig.position.y=Math.abs(Math.sin(time*10))*.026*moving+Math.sin(time*2)*.006;rig.rotation.z=Math.sin(time*5)*.025*moving;legs[0].rotation.z=-.035;legs[1].rotation.z=.035;arms[0].rotation.z=.07;arms[1].rotation.z=-.07;}
