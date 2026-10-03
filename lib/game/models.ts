@@ -9,24 +9,58 @@ export function cylinder(g:T.Object3D,x:number,y:number,z:number,r1:number,r2:nu
 function cone(g:T.Object3D,x:number,y:number,z:number,r:number,h:number,c:string){return cylinder(g,x,y,z,0,r,h,c)}
 function cape(g:T.Group,color:string){const geo=new T.PlaneGeometry(.78,1.18,12,16);const a=geo.attributes.position;for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i);a.setXYZ(i,x*(1.2-y*.35),y,Math.cos(x*28)*.025-(.6-y)*.17)}geo.computeVertexNormals();const material=mat(color).clone();material.side=T.DoubleSide;const m=new T.Mesh(geo,material);m.position.set(0,.94,-.23);m.castShadow=true;g.add(m);}
 function sculpt(g:T.Object3D,x:number,y:number,z:number,w:number,h:number,d:number,c:string,metal=0){const mesh=new T.Mesh(new RoundedBoxGeometry(w,h,d,3,Math.min(w,h,d)*.25),mat(c,metal));mesh.position.set(x,y,z);mesh.castShadow=true;g.add(mesh);return mesh;}
+function anatomicalTorso(g:T.Object3D,y:number,color:string,thick=1){const profile=[new T.Vector2(.165,y-.33),new T.Vector2(.20,y-.26),new T.Vector2(.225,y-.08),new T.Vector2(.285,y+.15),new T.Vector2(.255,y+.30),new T.Vector2(.165,y+.34)];const mesh=new T.Mesh(new T.LatheGeometry(profile,32),mat(color));mesh.scale.set(thick,1,.62);mesh.castShadow=true;g.add(mesh);return mesh}
 function limb(g:T.Object3D,a:T.Vector3,b:T.Vector3,r1:number,r2:number,color:string){const delta=b.clone().sub(a);const m=new T.Mesh(new T.CylinderGeometry(r2,r1,delta.length(),16),mat(color));m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());m.castShadow=true;g.add(m);return m;}
 function blade(g:T.Object3D,x:number,y:number,z:number,color:string,len=1){const m=new T.Mesh(new T.CylinderGeometry(.025,.025,len,6),new T.MeshStandardMaterial({color,emissive:color,emissiveIntensity:2}));m.position.set(x,y,z);g.add(m);return m}
+function detailPlane(g:T.Object3D,x:number,y:number,z:number,w:number,h:number,c:string,metal=0){const m=sculpt(g,x,y,z,w,h,.018,c,metal);m.castShadow=false;return m}
+function makeOogway(c:Fighter){
+ const g=new T.Group(),rig=new T.Group();g.add(rig);const legs:T.Group[]=[],arms:T.Group[]=[];
+ // Oogway has a broad, old tortoise body, a long neck and a layered monk robe.
+ const shell=ball(rig,0,.98,-.13,.43,'#443f32',.92,1.12,.52);shell.rotation.x=-.08;
+ for(let ring=0;ring<3;ring++)for(let i=0;i<7;i++){const a=i/7*Math.PI*2;ball(rig,Math.sin(a)*(.21+ring*.065),.98+Math.cos(a)*(.36-ring*.08),-.36,.035,'#77705a',1.3,.75,.35)}
+ ball(rig,0,1.02,.04,.38,'#c5b98b',.88,1.08,.58);
+ const robe=anatomicalTorso(rig,1.05,'#ddd8c5',1.1);robe.scale.z=.78;
+ for(let i=0;i<5;i++){const fold=detailPlane(rig,(i-2)*.065,.97,.292,.022,.52,i%2?'#c7c1aa':'#eee9d8');fold.rotation.z=(i-2)*.025}
+ const sash=detailPlane(rig,0,.94,.305,.62,.115,'#877d45');sash.rotation.z=-.16;
+ limb(rig,new T.Vector3(0,1.33,0),new T.Vector3(0,1.63,.035),.105,.085,'#afa479');
+ for(let i=0;i<4;i++)cylinder(rig,0,1.38+i*.07,.025,.09-i*.007,.096-i*.007,.035,i%2?'#918967':'#b8ad82');
+ const head=ball(rig,0,1.72,.045,.19,'#aea477',.82,.66,1.18);
+ ball(rig,0,1.68,.225,.12,'#c7bd8d',1.15,.54,1.08);ball(rig,0,1.66,.35,.055,'#5c513a',1.1,.55,1.25);
+ for(const side of [-1,1]){ball(rig,side*.086,1.77,.205,.047,'#faf7e8',1,.78,.38);ball(rig,side*.086,1.77,.229,.017,'#20221d',.7,1,.35);sculpt(rig,side*.085,1.815,.203,.12,.025,.03,'#716849').rotation.z=side*.13}
+ const smile=new T.Mesh(new T.TorusGeometry(.087,.009,8,24,Math.PI),mat('#6a4736'));smile.position.set(0,1.675,.355);smile.rotation.z=Math.PI;rig.add(smile);
+ for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.16,.69,0);limb(leg,new T.Vector3(0,0,0),new T.Vector3(side*.015,-.28,.035),.095,.062,'#aaa071');ball(leg,side*.015,-.34,.10,.095,'#aaa071',1.1,.45,1.75);rig.add(leg);legs.push(leg);const arm=new T.Group();arm.position.set(side*.31,1.23,.02);limb(arm,new T.Vector3(0,0,0),new T.Vector3(side*.03,-.33,.08),.095,.052,'#aaa071');ball(arm,side*.03,-.39,.12,.075,'#aaa071',1,.72,1.3);for(let f=0;f<3;f++)ball(arm,side*.03+(f-1)*.035,-.43,.155,.024,'#aaa071',.65,1.8,.7);rig.add(arm);arms.push(arm)}
+ const staff=cylinder(rig,.48,1.05,.15,.027,.038,1.72,'#6e4529');staff.rotation.z=-.09;const crook=new T.Mesh(new T.TorusGeometry(.105,.027,8,18,Math.PI*1.35),mat('#6e4529'));crook.position.set(.405,1.91,.15);crook.rotation.z=-.55;rig.add(crook);
+ g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+}
+function makeOptimus(c:Fighter){
+ const g=new T.Group(),rig=new T.Group();g.add(rig);const legs:T.Group[]=[],arms:T.Group[]=[];
+ // Separate hard-surface build for the truck cab, grille, armor plates and helmet.
+ sculpt(rig,0,1.11,0,.72,.64,.42,'#bd2f35',.72);for(const side of [-1,1]){const glass=sculpt(rig,side*.185,1.27,.226,.32,.21,.028,'#75d8f0',.75);glass.rotation.z=side*.035}
+ sculpt(rig,0,1.04,.235,.39,.24,.035,'#c4cbd0',.9);for(let i=0;i<5;i++)detailPlane(rig,0,.955+i*.043,.258,.33,.014,'#6b747d',.9);
+ sculpt(rig,0,.75,0,.48,.22,.32,'#d8dde0',.85);detailPlane(rig,0,.76,.177,.27,.11,'#f0ad22',.65);
+ for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.18,.66,0);sculpt(leg,0,-.19,0,.27,.42,.3,'#31569c',.72);sculpt(leg,0,-.43,.04,.31,.24,.37,'#294b89',.72);for(let j=0;j<3;j++)detailPlane(leg,0,-.25-j*.055,.16,.19,.022,'#7790aa',.9);sculpt(leg,0,-.58,.09,.34,.16,.5,'#244679',.75);rig.add(leg);legs.push(leg);
+ const arm=new T.Group();arm.position.set(side*.46,1.3,0);sculpt(arm,0,-.04,0,.34,.30,.38,'#c43238',.72);sculpt(arm,side*.015,-.30,.015,.25,.34,.29,'#bd3035',.72);sculpt(arm,side*.02,-.51,.07,.22,.18,.30,'#31569c',.72);for(let f=0;f<4;f++)sculpt(arm,side*(f-1.5)*.035,-.61,.14,.045,.13,.055,'#8796a7',.85);rig.add(arm);arms.push(arm)}
+ sculpt(rig,0,1.62,0,.36,.35,.32,'#31569c',.8);sculpt(rig,0,1.66,.18,.28,.22,.05,'#aab6c2',.9);detailPlane(rig,0,1.61,.216,.18,.06,'#232b35',.7);for(const side of [-1,1]){detailPlane(rig,side*.072,1.69,.216,.10,.042,'#83efff',.75);const antenna=sculpt(rig,side*.20,1.81,0,.045,.36,.07,'#31569c',.8);antenna.rotation.z=side*.12;sculpt(rig,side*.32,1.42,-.12,.08,.49,.09,'#c7cdd3',.9)}
+ const head=rig.children[rig.children.length-5] as T.Object3D;g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+}
 export function makeFighter(c:Fighter):T.Group{
+ if(c.name==='Oogway')return makeOogway(c);
+ if(c.name==='Optimus Prime')return makeOptimus(c);
  const g=new T.Group(),rig=new T.Group();g.add(rig);const kind=c.model;const metallic=['robot','armor','surfer','blades'].includes(kind);const skin=kind==='brute'?'#588e4c':kind==='yoda'?'#89a568':c.skin;const animal=['panda','leopard','lion','tiger','rat','monkey','fox','hedgehog','turtle','tortoise','bowser','ape','kaiju'].includes(kind);
- const thick=['brute','panda','ape','bowser','robot'].includes(kind)?1.35:1;
+ const thick=['brute','panda','ape','bowser','robot'].includes(kind)?1.32:kind==='titan'?1.15:.88;
  const bare=['wrestler','fighter','boxer','brute','kratos','titan'].includes(kind);const bodyColor=bare?skin:c.color;
- const torso=sculpt(rig,0,1.07,0,.61*thick,.63,.32,bodyColor);torso.scale.set(1,.98,.92);const chest=sculpt(rig,0,1.18,.145,.54*thick,.31,.055,bodyColor);chest.rotation.x=-.04;const waist=sculpt(rig,0,.82,0,.40*thick,.25,.27,bodyColor);const hip=sculpt(rig,0,.67,0,.43*thick,.22,.29,c.color);
- for(const side of [-1,1]){ball(rig,side*.22*thick,1.18,.01,.135,bodyColor,1,.92,.92);sculpt(rig,side*.12*thick,.98,.164,.17,.25,.035,bodyColor).rotation.z=side*.05}
+ const torso=anatomicalTorso(rig,1.07,bodyColor,thick);const chest=ball(rig,0,1.20,.075,.18,bodyColor,1.34*thick,.68,.68);const waist=ball(rig,0,.84,0,.155,bodyColor,1.02*thick,.78,.68);const hip=sculpt(rig,0,.67,0,.34*thick,.19,.25,c.color);
+ for(const side of [-1,1]){ball(rig,side*.205*thick,1.22,.01,.102,bodyColor,1,.92,.92);sculpt(rig,side*.10*thick,.98,.151,.13,.24,.028,bodyColor).rotation.z=side*.05}
  cylinder(rig,0,1.43,0,.075,.10,.16,skin);
  const legs:T.Group[]=[],arms:T.Group[]=[];
- for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.13*thick,.66,0);const legColor=bare?skin:c.color;
- limb(leg,new T.Vector3(0,0,0),new T.Vector3(side*.01,-.25,.012),.112*thick,.079*thick,legColor);ball(leg,side*.01,-.25,.012,.08*thick,legColor);limb(leg,new T.Vector3(side*.01,-.25,.012),new T.Vector3(side*.02,-.49,0),.075*thick,.058*thick,legColor);
- sculpt(leg,side*.02,-.53,.055,.155*thick,.13,.26,['plumber','hedgehog'].includes(kind)?kind==='hedgehog'?c.accent:'#392c29':c.accent);rig.add(leg);legs.push(leg);
- const arm=new T.Group();arm.position.set(side*.29*thick,1.26,0);const armColor=bare?skin:c.color;ball(arm,0,-.035,0,.118*thick,armColor,1,1.15,1);limb(arm,new T.Vector3(0,-.04,0),new T.Vector3(side*.04,-.235,.015),.093*thick,.063*thick,armColor);ball(arm,side*.04,-.235,.015,.066*thick,armColor);limb(arm,new T.Vector3(side*.04,-.235,.015),new T.Vector3(side*.035,-.41,.055),.066*thick,.049*thick,armColor);
- sculpt(arm,side*.035,-.425,.057,.13*thick,.08,.14,c.accent,metallic?.6:0);const handColor=kind==='boxer'?c.accent:metallic?c.accent:skin;ball(arm,side*.035,-.48,.06,.071*thick,handColor,.8,1.2,.66);for(let f=0;f<4;f++)ball(arm,side*.035+(f-1.5)*.025,-.52,.08,.016,handColor,.65,1.9,.8);ball(arm,side*.035-side*.065,-.48,.1,.022,handColor,.8,1.5,.8);rig.add(arm);arms.push(arm)}
- const head=ball(rig,0,1.61,0,.158,animal?kind==='panda'?'#f4eee3':c.color:metallic?c.color:skin,.94,1.18,.86);
+ for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*.105*thick,.68,0);const legColor=bare?skin:c.color;
+ limb(leg,new T.Vector3(0,0,0),new T.Vector3(side*.008,-.29,.012),.088*thick,.066*thick,legColor);ball(leg,side*.008,-.29,.012,.067*thick,legColor);limb(leg,new T.Vector3(side*.008,-.29,.012),new T.Vector3(side*.018,-.57,0),.064*thick,.048*thick,legColor);
+ sculpt(leg,side*.018,-.61,.065,.135*thick,.11,.25,['plumber','hedgehog'].includes(kind)?kind==='hedgehog'?c.accent:'#392c29':c.accent);rig.add(leg);legs.push(leg);
+ const arm=new T.Group();arm.position.set(side*.255*thick,1.27,0);const armColor=bare?skin:c.color;ball(arm,0,-.035,0,.09*thick,armColor,1,1.12,1);limb(arm,new T.Vector3(0,-.04,0),new T.Vector3(side*.025,-.25,.015),.075*thick,.055*thick,armColor);ball(arm,side*.025,-.25,.015,.057*thick,armColor);limb(arm,new T.Vector3(side*.025,-.25,.015),new T.Vector3(side*.025,-.47,.055),.057*thick,.042*thick,armColor);
+ sculpt(arm,side*.025,-.475,.057,.105*thick,.075,.13,c.accent,metallic?.6:0);const handColor=kind==='boxer'?c.accent:metallic?c.accent:skin;ball(arm,side*.025,-.53,.07,.059*thick,handColor,.78,1.15,.7);for(let f=0;f<4;f++)ball(arm,side*.025+(f-1.5)*.021,-.575,.09,.014,handColor,.6,1.8,.78);ball(arm,side*.025-side*.054,-.53,.105,.019,handColor,.8,1.5,.8);rig.add(arm);arms.push(arm)}
+ const head=ball(rig,0,1.62,0,.143,animal?kind==='panda'?'#f4eee3':c.color:metallic?c.color:skin,.91,1.17,.84);
  if(!animal&&!metallic&&!['mask','spider','vader','bat','maul','helmet'].includes(kind)){ball(rig,0,1.515,.026,.111,skin,.82,.70,.78);for(const side of [-1,1]){ball(rig,side*.151,1.60,0,.031,skin,.45,1,.66);ball(rig,side*.061,1.626,.134,.032,'#f5f1ec',1,.36,.16);ball(rig,side*.061,1.626,.142,.013,'#425e70',.72,1,.35);sculpt(rig,side*.061,1.659,.136,.065,.012,.018,'#3a2d2b');}ball(rig,0,1.585,.151,.022,skin,.55,1.45,1.25);sculpt(rig,0,1.535,.139,.061,.009,.013,'#8e5c59');sculpt(rig,0,1.49,.095,.19,.055,.09,skin);}
- const eyeColor=['vader','robot','armor','mask','spider','bat'].includes(kind)?'#b9f5ff':'#17202b';for(const side of [-1,1])box(rig,side*.066,1.63,.155,.054,.025,.015,eyeColor);
+ const eyeColor=['vader','robot','armor','mask','spider','bat'].includes(kind)?'#b9f5ff':'#17202b';if(animal||metallic||['vader','robot','armor','mask','spider','bat','maul','helmet','luchador'].includes(kind))for(const side of [-1,1]){const eye=ball(rig,side*.059,1.63,.137,.034,eyeColor,1,.42,.18);eye.rotation.z=side*.08}
  box(rig,0,.78,.188,.40*thick,.045,.025,c.accent,metallic?.8:0);
  if(['cape','mustachecape','bat','vader','blondcape','scout','firelord','helmet'].includes(kind))cape(rig,c.accent);
  if(['ninja','longhair','swordsman','scout','mustache','mustachecape','akatsuki','bowl','silverhair','blond','blondcape','spiky','pinkhair','blindfold','tattoo','firelord'].includes(kind)){
