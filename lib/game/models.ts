@@ -117,4 +117,23 @@ export function makeFighter(c:Fighter):T.Group{
  if(c.name==='Po')hip.scale.x=1.4;
  g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
+// Lightweight match LOD. The collection uses makeFighter; remote combatants use
+// this small rig because their screen-space details are only a few pixels wide.
+export function makeCombatFighter(c:Fighter):T.Group{
+ const g=new T.Group(),rig=new T.Group();g.add(rig);const legs:T.Group[]=[],arms:T.Group[]=[];
+ const animal=['panda','leopard','lion','tiger','rat','monkey','fox','hedgehog','turtle','tortoise','bowser','ape','kaiju'].includes(c.model);
+ const metal=['robot','armor','surfer','blades','vader'].includes(c.model);const bulky=['brute','panda','ape','bowser','robot','kaiju'].includes(c.model);const skin=c.model==='brute'?'#588e4c':c.model==='yoda'?'#89a568':c.skin;
+ const mesh=(geo:T.BufferGeometry,color:string,metalness=0)=>{const m=new T.Mesh(geo,mat(color,metalness));m.castShadow=false;m.receiveShadow=false;rig.add(m);return m};
+ const torso=mesh(new T.CapsuleGeometry(bulky?.28:.22,.50,4,8),c.color,metal?.55:0);torso.position.y=1.03;torso.scale.set(bulky?1.25:.92,1,.66);
+ const hip=mesh(new T.CapsuleGeometry(bulky?.20:.16,.14,3,8),c.accent,metal?.55:0);hip.position.y=.69;hip.rotation.z=Math.PI/2;
+ const head=mesh(new T.SphereGeometry(animal?.18:.145,12,8),animal?c.accent:metal?c.color:skin,metal?.5:0);head.position.y=1.58;head.scale.set(.92,1.1,.86);
+ for(const side of [-1,1]){const leg=new T.Group();leg.position.set(side*(bulky?.15:.105),.65,0);const thigh=new T.Mesh(new T.CapsuleGeometry(bulky?.09:.065,.19,3,6),mat(c.color,metal?.45:0));thigh.position.y=-.14;const shin=new T.Mesh(new T.CapsuleGeometry(bulky?.075:.052,.19,3,6),mat(c.color,metal?.45:0));shin.position.y=-.41;const foot=new T.Mesh(new T.BoxGeometry(bulky?.20:.14,.09,.24),mat(c.accent,metal?.45:0));foot.position.set(0,-.57,.07);leg.add(thigh,shin,foot);rig.add(leg);legs.push(leg);
+ const arm=new T.Group();arm.position.set(side*(bulky?.34:.245),1.25,0);const upper=new T.Mesh(new T.CapsuleGeometry(bulky?.095:.06,.17,3,6),mat(c.color,metal?.45:0));upper.position.y=-.13;const lower=new T.Mesh(new T.CapsuleGeometry(bulky?.075:.05,.17,3,6),mat(c.color,metal?.45:0));lower.position.y=-.38;const hand=new T.Mesh(new T.SphereGeometry(bulky?.07:.05,8,6),mat(metal?c.accent:skin));hand.position.set(0,-.53,.03);arm.add(upper,lower,hand);rig.add(arm);arms.push(arm)}
+ if(['cape','mustachecape','bat','vader','blondcape','scout','firelord','helmet'].includes(c.model)){const cp=new T.Mesh(new T.PlaneGeometry(.58,.92),mat(c.accent));cp.position.set(0,1.03,-.18);cp.material.side=T.DoubleSide;rig.add(cp)}
+ if(['blindfold','silverhair','blond','blondcape','spiky','ninja','akatsuki','bowl'].includes(c.model)){const hair=mesh(new T.ConeGeometry(.18,.27,7),['blindfold','silverhair'].includes(c.model)?'#e8eff4':['blond','blondcape'].includes(c.model)?'#edce50':'#171a24');hair.position.y=1.78}
+ if(c.model==='blindfold'){const band=mesh(new T.BoxGeometry(.30,.065,.06),'#0b0e17');band.position.set(0,1.63,.125)}
+ if(c.model==='robot'){const glass=mesh(new T.BoxGeometry(.48,.14,.04),'#78ddf1',.65);glass.position.set(0,1.23,.22);const grille=mesh(new T.BoxGeometry(.28,.19,.04),'#c7cdd3',.8);grille.position.set(0,1.03,.23)}
+ if(c.model==='tortoise'){const neck=mesh(new T.CapsuleGeometry(.08,.27,3,7),'#afa479');neck.position.set(0,1.44,.02);const shell=mesh(new T.SphereGeometry(.34,12,8),'#514a37');shell.position.set(0,1,-.18);shell.scale.set(.92,1.1,.45)}
+ g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
+}
 export function animateFighter(g:T.Group,time:number,moving:number,attack=false,flying=false){const {rig,legs,arms}=g.userData;if(!rig)return;const stride=Math.sin(time*10)*.65*moving;legs[0].rotation.x=stride;legs[1].rotation.x=-stride;arms[0].rotation.x=flying?-1.1:-stride*.8;arms[1].rotation.x=attack?-1.5:flying?-1.1:stride*.8;rig.position.y=Math.abs(Math.sin(time*10))*.026*moving+Math.sin(time*2)*.006;rig.rotation.z=Math.sin(time*5)*.025*moving;legs[0].rotation.z=-.035;legs[1].rotation.z=.035;arms[0].rotation.z=.07;arms[1].rotation.z=-.07;}
