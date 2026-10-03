@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./premium.css";
 import "./map-preview.css";
+import "./map-world.css";
 
 export const metadata: Metadata = {
   title: "Chacha",
