@@ -14,12 +14,12 @@ export default function HomeHero3D(){
     renderer.setPixelRatio(Math.min(devicePixelRatio,coarse?1:1.25));
     renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;renderer.outputColorSpace=T.SRGBColorSpace;
     el.appendChild(renderer.domElement);
-    const scene=new T.Scene();const camera=new T.PerspectiveCamera(34,1,.1,100);camera.position.set(0,3.7,12.5);
+    const scene=new T.Scene();const camera=new T.PerspectiveCamera(34,1,.1,100);camera.position.set(0,1.1,12.5);camera.lookAt(0,-.05,0);
     scene.add(new T.HemisphereLight('#fff8ff','#8d79bb',3.2));
     const key=new T.DirectionalLight('#fff4fb',5);key.position.set(5,8,8);scene.add(key);
     const rim=new T.DirectionalLight('#9edcff',4);rim.position.set(-6,4,-2);scene.add(rim);
     const group=new T.Group();scene.add(group);
-    const fighter=makeFighter(FIGHTERS['gojo']);fighter.scale.setScalar(1.16);fighter.position.y=-2.65;group.add(fighter);
+    const fighter=makeFighter(FIGHTERS['gojo']);fighter.scale.setScalar(2.4);fighter.position.y=-2.43;group.add(fighter);
     const glass=new T.MeshPhysicalMaterial({color:'#d8c9ff',roughness:.13,metalness:.04,transmission:.38,thickness:1.4,transparent:true,opacity:.82,iridescence:.45,iridescenceIOR:1.55});
     const portal=new T.Mesh(new T.TorusGeometry(3.42,.2,18,96),glass);portal.rotation.x=.09;portal.position.y=.25;group.add(portal);
     const portal2=new T.Mesh(new T.TorusGeometry(4.02,.035,8,96),new T.MeshBasicMaterial({color:'#ffd3e9',transparent:true,opacity:.66}));portal2.rotation.set(.08,.22,.04);portal2.position.y=.25;group.add(portal2);

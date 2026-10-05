@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {createRoom,addPlayer,startMatch,step,useMove,applyInput,selectFighter,respawn,publicRoom} from '../lib/game/engine';
 import {FIGHTERS,ROSTER} from '../lib/game/roster';
+import {MAPS,canStand} from '../lib/game/maps';
 const t=1000000;
 function setup(){const r=createRoom('ABCDEF','shibuya',t);const a=addPlayer(r,'A',0,'a','secret-a',t);const b=addPlayer(r,'B',1,'b','secret-b',t);const c=addPlayer(r,'C',0,'c','secret-c',t);startMatch(r,t);for(const p of r.players){p.x=0;p.z=0;p.yaw=0;p.spawnProtection=0}b.z=3;c.x=1;return {r,a,b,c}}
 let count=0;function test(name:string,f:()=>void){f();count++;console.log('PASS',name)}
@@ -16,4 +17,6 @@ test('Jon Jones five-minute lock and one-hit ultimate',()=>{const {r,a,b}=setup(
 test('Assists credit recent contributors',()=>{const {r,a,b,c}=setup();useMove(r,c,0,t+5000);b.hp=1;useMove(r,a,0,t+6000);assert.equal(a.kills,1);assert.equal(c.assists,1);assert.equal(b.deaths,1)});
 test('Headshots depend on vertical beam intersection',()=>{const {r,a,b}=setup();a.character='iron-man';b.z=12;b.hp=300;const ch=FIGHTERS[b.character];a.aimY=Math.atan2(ch.height*.9-FIGHTERS[a.character].height*.72,12);useMove(r,a,2,t+5000);assert.equal(a.headshots,1);assert.equal(a.rangedHits,1);a.aimY=-.8;useMove(r,a,2,t+12000);assert.equal(a.rangedHits,1)});
 test('Ten-minute deadline ends match and rematch resets stats',()=>{const {r,a}=setup();a.kills=3;a.assists=2;r.scores=[100,200,40,0];step(r,t+600001);assert.equal(r.status,'ended');assert.equal(r.winner,1);startMatch(r,t+610000);assert.equal(a.kills,0);assert.equal(a.assists,0);assert.equal(a.ults,0)});
+test('Bots defend the single owned hill without an undefined target',()=>{const r=createRoom('BOTEST','shibuya',t);for(let i=0;i<12;i++)addPlayer(r,'bot',i%4,String(i),'',t,true);startMatch(r,t);for(let owner=0;owner<4;owner++){r.points[0].owner=owner;step(r,t+(owner+1)*1000)}assert(r.players.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.z)))});
+test('Every fighter respawns outside buildings on every map and team',()=>{for(const map of MAPS){const r=createRoom('SPAWNS',map.id,t);for(let team=0;team<4;team++){const p=addPlayer(r,'spawn',team,String(team),'',t);for(const c of ROSTER){p.character=c.id;for(let i=0;i<5;i++){respawn(r,p,t);assert(canStand(p.x,p.z,r.map,Math.min(2.4,Math.max(.65,c.height*.36))),`${c.name} ${map.id} team ${team}`)}}}}});
 console.log(`${count} engine tests passed`);

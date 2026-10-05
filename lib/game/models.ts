@@ -137,4 +137,85 @@ export function makeCombatFighter(c:Fighter):T.Group{
  if(c.model==='tortoise'){const neck=mesh(new T.CapsuleGeometry(.08,.27,3,7),'#afa479');neck.position.set(0,1.44,.02);const shell=mesh(new T.SphereGeometry(.34,12,8),'#514a37');shell.position.set(0,1,-.18);shell.scale.set(.92,1.1,.45)}
  addPaintedFace(rig,c,true);g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
-export function animateFighter(g:T.Group,time:number,moving:number,attack=false,flying=false){const {rig,legs,arms}=g.userData;if(!rig)return;const stride=Math.sin(time*10)*.65*moving;legs[0].rotation.x=stride;legs[1].rotation.x=-stride;arms[0].rotation.x=flying?-1.1:-stride*.8;arms[1].rotation.x=attack?-1.5:flying?-1.1:stride*.8;rig.position.y=Math.abs(Math.sin(time*10))*.026*moving+Math.sin(time*2)*.006;rig.rotation.z=Math.sin(time*5)*.025*moving;legs[0].rotation.z=-.035;legs[1].rotation.z=.035;arms[0].rotation.z=.07;arms[1].rotation.z=-.07;}
+type LegPose={rest:T.Vector3;rotation:T.Euler;bounds:T.Box3;length:number};
+type WalkPose={lastTime:number;phase:number;moving:number;speed:number;air:number;floor:number;restRig:T.Vector3;legs:LegPose[]};
+
+// Measure the rig once, including merged limb meshes. Character models have
+// different leg lengths and original floor offsets (especially Oogway).
+function localBounds(root:T.Object3D){
+ root.updateWorldMatrix(true,true);
+ const inverse=new T.Matrix4().copy(root.matrixWorld).invert();
+ const transform=new T.Matrix4(),bounds=new T.Box3();
+ root.traverse(child=>{
+  if(!(child instanceof T.Mesh))return;
+  if(!child.geometry.boundingBox)child.geometry.computeBoundingBox();
+  if(!child.geometry.boundingBox)return;
+  transform.multiplyMatrices(inverse,child.matrixWorld);
+  bounds.union(child.geometry.boundingBox.clone().applyMatrix4(transform));
+ });
+ return bounds;
+}
+function walkPose(g:T.Group,time:number):WalkPose{
+ const {rig,legs}=g.userData as {rig:T.Group;legs:T.Group[]};
+ const poses=legs.map(leg=>{
+  const bounds=localBounds(leg);
+  return {rest:leg.position.clone(),rotation:leg.rotation.clone(),bounds,length:Math.max(.2,-bounds.min.y)};
+ });
+ // Silver Surfer stands on the board outside his rig, rather than inside it.
+ let support=0;
+ for(const child of g.children){
+  if(child===rig||!(child instanceof T.Mesh))continue;
+  child.geometry.computeBoundingBox();child.updateMatrix();
+  const top=child.geometry.boundingBox!.clone().applyMatrix4(child.matrix).max.y;
+  if(top>0&&top<.2)support=Math.max(support,top);
+ }
+ const floor=support-Math.min(...poses.map(p=>p.rest.y+p.bounds.min.y));
+ return {lastTime:time,phase:0,moving:0,speed:0,air:0,floor,restRig:rig.position.clone(),legs:poses};
+}
+// The lowest transformed corner is inexpensive to evaluate and independent of
+// whether static limb meshes were merged by the match renderer.
+function lowestLegPoint(bounds:T.Box3,rotation:T.Quaternion){
+ const {x,y,z,w}=rotation;
+ const rowX=2*(x*y+z*w),rowY=1-2*(x*x+z*z),rowZ=2*(y*z-x*w);
+ return rowX*(rowX<0?bounds.max.x:bounds.min.x)
+  +rowY*(rowY<0?bounds.max.y:bounds.min.y)
+  +rowZ*(rowZ<0?bounds.max.z:bounds.min.z);
+}
+export function animateFighter(g:T.Group,time:number,moving:number,attack=false,flying=false,travelSpeed?:number){
+ const {rig,legs,arms}=g.userData as {rig?:T.Group;legs:T.Group[];arms:T.Group[]};
+ if(!rig||legs.length<2||arms.length<2)return;
+ const pose:WalkPose=g.userData.walkPose||(g.userData.walkPose=walkPose(g,time));
+ const dt=Math.max(0,Math.min(.05,time-pose.lastTime));pose.lastTime=time;
+ const blend=1-Math.exp(-dt*14);
+ pose.moving+=(T.MathUtils.clamp(moving,0,1)-pose.moving)*blend;
+ pose.speed+=(Math.max(0,travelSpeed??moving*4)-pose.speed)*blend;
+ pose.air+=((flying?1:0)-pose.air)*(1-Math.exp(-dt*18));
+ if(pose.moving<.001)pose.moving=0;
+ if(pose.air<.001)pose.air=0;
+ // Scale stride length into world units so a giant's longer legs take fewer
+ // steps at the same travel speed. Bound cadence to keep short rigs readable.
+ const strideDistance=4*pose.legs[0].length*Math.sin(.32)*Math.abs(g.scale.y)*Math.max(.2,pose.moving);
+ const cadence=travelSpeed===undefined?10:T.MathUtils.clamp(pose.speed/Math.max(.05,strideDistance)*Math.PI*2,3,16);
+ // A paused character keeps both soles still; starting does not jump to a
+ // wall-clock phase. Blend cadence during the last fraction of a stopping step.
+ pose.phase=(pose.phase+dt*cadence*Math.min(1,pose.moving*5))%(Math.PI*2);
+ const groundMove=pose.moving*(1-pose.air);
+ const compression=Math.sin(pose.phase*2)**2*.007*groundMove;
+ rig.position.copy(pose.restRig);rig.position.y+=pose.floor-compression;
+ for(let i=0;i<2;i++){
+  const leg=legs[i],rest=pose.legs[i],phase=(pose.phase+i*Math.PI)%(Math.PI*2);
+  // First half of each step is planted; only the recovery foot lifts. The
+  // modest hip swing avoids the old stiff, high-kicking float animation.
+  const swing=Math.cos(phase),lift=Math.max(0,-Math.sin(phase))**2*.12*rest.length*groundMove;
+  leg.rotation.copy(rest.rotation);leg.rotation.x-=swing*.32*groundMove;
+  leg.rotation.x+=pose.air*(i===0?.18:.32);
+  leg.position.copy(rest.rest);
+  const floorAtRest=rest.rest.y+rest.bounds.min.y;
+  leg.position.y+=floorAtRest-(rest.rest.y+lowestLegPoint(rest.bounds,leg.quaternion));
+  leg.position.y+=compression+lift+pose.air*.025;
+  const arm=arms[i];
+  const target=attack&&i===1?-1.5:flying?-1.1:swing*.28*pose.moving;
+  arm.rotation.x+=(target-arm.rotation.x)*(1-Math.exp(-dt*20));
+  arm.rotation.z=i===0?.07:-.07;
+ }
+}

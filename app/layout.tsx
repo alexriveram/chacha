@@ -6,10 +6,7 @@ import "./map-world.css";
 
 export const metadata: Metadata = {
   title: "Chacha",
-  description: "Four teams. Three worlds. Capture points and choose your ultimate fighter.",
-  other: {
-    "codex-preview": "development",
-  },
+  description: "Four teams. Three worlds. Own the hill. Play Chacha with friends from any device.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

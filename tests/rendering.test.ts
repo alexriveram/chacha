@@ -18,7 +18,7 @@ assert.equal(cameraDistance(new T.Vector3(0,2,0),new T.Vector3(0,0,-1),15,boxes)
 assert.equal(cameraDistance(new T.Vector3(4,2,0),new T.Vector3(0,0,-1),15,boxes),15);
 assert.equal(cameraDistance(new T.Vector3(0,8,0),new T.Vector3(0,0,-1),15,boxes),15);
 // Scenery labels only need a canvas placeholder for geometry/draw-call checks.
-Object.defineProperty(globalThis,'document',{value:{createElement:()=>({width:0,height:0,getContext:()=>({fillRect(){},fillText(){}})})},configurable:true});
+Object.defineProperty(globalThis,'document',{value:{createElement:()=>({width:0,height:0,getContext:()=>new Proxy({},{get:()=>()=>{},set:()=>true})})},configurable:true});
 for(const map of MAPS){
  const scene=new T.Scene(),world=buildScenery(scene,map.id);
  const count=()=>{let meshes=0,triangles=0;world.traverse(o=>{if(o instanceof T.Mesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3}});return {meshes,triangles}};

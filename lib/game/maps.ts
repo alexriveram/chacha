@@ -1,7 +1,7 @@
 export type Obstacle={x:number;z:number;w:number;d:number;h:number;style:string};
 export const MAPS=[{id:'shibuya',name:'Shibuya Crossing',tag:'TOKYO / NIGHTFALL',description:'Neon streets. Tight corners. Fight for the crossing.',tint:'#263951',sky:'#101929',ground:'#28313f',atlas:'0% 0%'},{id:'deathstar',name:'Death Star Hangar',tag:'OUTER RIM / ORBITAL',description:'Cargo cover. Open firing lanes. Control the hangar.',tint:'#4e687d',sky:'#080f20',ground:'#465362',atlas:'100% 0%'},{id:'leaf',name:'Hidden Leaf Village',tag:'LAND OF FIRE / SUNSET',description:'Village lanes. Rooftop silhouettes. Defend the Leaf.',tint:'#bf8862',sky:'#d6a275',ground:'#b8956b',atlas:'0% 100%'}];
 export const POINTS=[{id:'HILL',x:0,z:0}];
-export const SPAWNS=[{x:-43,z:38},{x:43,z:38},{x:-43,z:-38},{x:43,z:-38}];
+export const SPAWNS=[{x:-43,z:16},{x:43,z:16},{x:-43,z:-16},{x:43,z:-16}];
 const obstacleCache=new Map<string,Obstacle[]>();
 export function obstacles(map:string):Obstacle[]{
  const cached=obstacleCache.get(map);if(cached)return cached;
