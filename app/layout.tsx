@@ -4,6 +4,7 @@ import "./premium.css";
 import "./map-preview.css";
 import "./map-world.css";
 import "./game-menu.css";
+import "./dark-theme.css";
 
 export const metadata: Metadata = {
   title: "Chacha",
