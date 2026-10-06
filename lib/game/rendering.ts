@@ -45,4 +45,4 @@ export function cameraDistance(origin:T.Vector3,direction:T.Vector3,maxDistance:
 }
 export function cameraBoxes(obstacles:readonly Obstacle[]){return obstacles.map(o=>new T.Box3(new T.Vector3(o.x-o.w/2,0,o.z-o.d/2),new T.Vector3(o.x+o.w/2,o.h,o.z+o.d/2)))}
 
-export function disposeObject(root:T.Object3D){root.traverse(o=>{if(o instanceof T.Mesh)o.geometry.dispose();if(o instanceof T.Sprite){o.material.map?.dispose();o.material.dispose()}})}
+export function disposeObject(root:T.Object3D){const materials=new Set<T.Material>();root.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();for(const material of Array.isArray(o.material)?o.material:[o.material])if(!material.userData.sharedGameMaterial)materials.add(material)}if(o instanceof T.Sprite){o.material.map?.dispose();materials.add(o.material)}});materials.forEach(material=>material.dispose())}

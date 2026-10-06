@@ -3,7 +3,7 @@ import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js'
 import {type Fighter} from './roster';
 import {addPaintedFace} from './faces';
 const mats=new Map<string,T.MeshStandardMaterial>();
-export function mat(color:string,metal=0,emission=0){const key=color+metal+emission;if(!mats.has(key)){const material=new T.MeshPhysicalMaterial({color,roughness:metal?.28:.67,metalness:metal,emissive:color,emissiveIntensity:emission,clearcoat:metal?.72:.08,clearcoatRoughness:metal?.12:.55,sheen:metal?0:.16,sheenColor:new T.Color(color).offsetHSL(0,0,.12)});mats.set(key,material)}return mats.get(key)!}
+export function mat(color:string,metal=0,emission=0){const key=color+metal+emission;if(!mats.has(key)){const material=new T.MeshPhysicalMaterial({color,roughness:metal?.28:.67,metalness:metal,emissive:color,emissiveIntensity:emission,clearcoat:metal?.72:.08,clearcoatRoughness:metal?.12:.55,sheen:metal?0:.16,sheenColor:new T.Color(color).offsetHSL(0,0,.12)});material.userData.sharedGameMaterial=true;mats.set(key,material)}return mats.get(key)!}
 export function box(g:T.Object3D,x:number,y:number,z:number,w:number,h:number,d:number,c:string,metal=0){const m=new T.Mesh(new T.BoxGeometry(w,h,d),mat(c,metal));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m}
 export function ball(g:T.Object3D,x:number,y:number,z:number,r:number,c:string,sx=1,sy=1,sz=1){const m=new T.Mesh(new T.SphereGeometry(r,24,18),mat(c));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.castShadow=true;g.add(m);return m}
 export function cylinder(g:T.Object3D,x:number,y:number,z:number,r1:number,r2:number,h:number,c:string){const m=new T.Mesh(new T.CylinderGeometry(r1,r2,h,12),mat(c));m.position.set(x,y,z);m.castShadow=true;g.add(m);return m}
