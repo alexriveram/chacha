@@ -1,7 +1,8 @@
 import * as T from 'three';
 import {box,ball,cylinder,mat} from './models';
 import {MAPS,obstacles,SPAWNS} from './maps';
-import {TEAM_COLORS} from './roster';
+import {TEAM_COLORS,TEAMS} from './roster';
+import {addDetailedFloor} from './floors';
 export function label(text:string,color='#ffffff',size=256){const cv=document.createElement('canvas');cv.width=size;cv.height=64;const ctx=cv.getContext('2d')!;ctx.fillStyle='rgba(7,12,24,.75)';ctx.fillRect(0,0,size,64);ctx.font='bold 28px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=color;ctx.fillText(text,size/2,33,size-12);const tx=new T.CanvasTexture(cv);const sprite=new T.Sprite(new T.SpriteMaterial({map:tx,depthTest:false}));sprite.scale.set(4,1,1);return sprite;}
 function roof(g:T.Object3D,x:number,y:number,z:number,w:number,d:number,color:string){const r=new T.Mesh(new T.ConeGeometry(1,1,4),mat(color));r.position.set(x,y,z);r.rotation.y=Math.PI/4;r.scale.set(w*.8,2.5,d*.8);g.add(r)}
 function tree(g:T.Object3D,x:number,z:number,h=6){cylinder(g,x,h*.3,z,.35,.5,h*.6,'#70533b');ball(g,x,h*.8,z,h*.35,'#466e45',1,1.2,1);}
@@ -219,9 +220,7 @@ export function buildScenery(scene:T.Scene,mapId:string){
  scene.fog=new T.Fog(scene.background,100,220);
  const g=new T.Group();g.name='battlefield-scenery';scene.add(g);
  solid(g,0,-.28,0,104,.5,96,leaf?'#b99b78':hangar?'#445260':'#303947');
- const field=leaf?'#d0b693':hangar?'#586876':'#454b60';
- for(const [x,z,w,d]of [[0,27,10,30],[0,-27,10,30],[29,0,34,10],[-29,0,34,10]])
-  solid(g,x,.012,z,w,.018,d,field);
+ addDetailedFloor(g,mapId);
  if(mapId==='shibuya'){
   // The central crossing remains readable; stripes stop outside the hill.
   for(const side of [-1,1])for(let i=-6;i<=6;i++){
@@ -272,7 +271,7 @@ export function buildScenery(scene:T.Scene,mapId:string){
  }
  for(let t=0;t<4;t++){
   const s=SPAWNS[t];ring(g,s.x,s.z,3.7,3.85,TEAM_COLORS[t],.065);
-  const tag=label(['RED','BLUE','GREEN','YELLOW'][t],TEAM_COLORS[t]);tag.position.set(s.x,3,s.z);g.add(tag);
+  const tag=label(TEAMS[t].toUpperCase(),TEAM_COLORS[t]);tag.position.set(s.x,3,s.z);g.add(tag);
  }
  return g;
 }
