@@ -111,3 +111,40 @@ body,.launch{background:#09090b;color:#f4f4f5}.launch:before{background:none}.la
   .character-stage .fighter-portrait{inset:0;width:100%;height:100%;object-fit:contain;object-position:center 38%}
   .character-stage .fighter-card strong{margin-top:auto;font-size:10px;z-index:2;text-shadow:0 2px 6px #000}
 }
+
+/* Scrollable home debrief. */
+html{scroll-behavior:smooth}.game-home{position:relative}.home-scroll-cue{position:absolute;z-index:6;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;color:#fff;font-size:10px;font-weight:800;letter-spacing:2.2px;text-decoration:none;text-shadow:0 2px 10px #000;opacity:.84}.home-scroll-cue span{font-size:20px;animation:debrief-bob 1.8s ease-in-out infinite}.game-debrief{position:relative;min-height:100dvh;display:flex;align-items:center;overflow:hidden;background:#080a08;isolation:isolate}.game-debrief>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2}.debrief-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#050706f5 0%,#050706cf 38%,#05070638 72%),linear-gradient(0deg,#050706bd,transparent 50%)}.debrief-copy{width:min(620px,88vw);margin-left:8vw;padding:90px 0;color:white}.debrief-copy .eyebrow{color:#fff;opacity:.72}.debrief-copy h2{font-size:clamp(52px,7vw,105px);line-height:.88;letter-spacing:-5px;margin:22px 0 32px;color:#fff}.debrief-copy p{max-width:570px;font-size:clamp(15px,1.25vw,19px);line-height:1.58;color:#f2f2f2;margin:0 0 18px;text-shadow:0 2px 12px #000}.debrief-copy b{color:white}.debrief-play{display:flex;align-items:center;gap:12px;margin-top:30px;padding:15px 24px;border-radius:12px;background:#fff;color:#111;border-color:#fff;font-weight:900}.debrief-up{position:absolute;right:42px;bottom:24px;display:flex;gap:10px;align-items:center;color:#fff;font-size:10px;font-weight:800;letter-spacing:2px;text-decoration:none;text-shadow:0 2px 10px #000}.debrief-up span{font-size:20px}@keyframes debrief-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@media(max-width:700px){.home-scroll-cue{bottom:14px;width:max-content;max-width:90vw}.debrief-copy{margin:0 auto;padding:80px 0 100px}.debrief-copy h2{letter-spacing:-3px}.debrief-shade{background:linear-gradient(0deg,#050706f7 0%,#050706c4 55%,#05070655)}.game-debrief>img{object-position:60% center}.debrief-up{right:24px;bottom:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.home-scroll-cue span{animation:none}}
+
+/* Simplified fighter picker: ranks and nine large portraits on the left, teams on the right. */
+.character-stage .tier-filters{margin:20px 0 16px;opacity:.82}
+.character-stage .side-team-picker{margin-top:30px;padding-top:20px;border-top:1px solid #ffffff18}
+.character-stage .side-team-picker>span{display:block;margin-bottom:10px;color:#aaaab5;font-size:9px;font-weight:850;letter-spacing:2.2px}
+.character-stage .side-team-picker .team-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.character-stage .side-team-picker .team-picker button{min-width:0;padding:9px 6px;border:1px solid #ffffff20;border-radius:5px;background:#18181d;color:#c8c8d1;font-size:10px;font-weight:800;text-transform:uppercase}
+.character-stage .side-team-picker .team-picker button[aria-pressed=true]{border-color:var(--team);background:color-mix(in srgb,var(--team) 24%,#151519);color:#fff;box-shadow:0 0 15px color-mix(in srgb,var(--team) 28%,transparent)}
+.character-stage .fighter-launch>.primary{margin-top:0}
+@media(min-width:1001px){
+  .character-stage .selection-main{grid-template-columns:minmax(560px,43%) minmax(0,57%)}
+  .character-stage .roster-grid{height:514px;max-height:514px;grid-auto-rows:168px}
+  .character-stage .fighter-card{min-height:158px}
+  .character-stage .fighter-card strong{font-size:13px}
+  .character-stage .fighter-showcase .character-render{inset:0 35% 0 0!important}
+  .character-stage .fighter-info{right:3%;width:31%}
+}
+@media(min-width:1500px) and (min-height:900px){
+  .character-stage .selection-main{grid-template-columns:minmax(700px,42%) minmax(0,58%)}
+  .character-stage .roster-grid{height:626px;max-height:626px;grid-auto-rows:204px}
+  .character-stage .fighter-card{min-height:194px}
+  .character-stage .fighter-card strong{font-size:14px}
+}
+@media(min-width:701px) and (max-width:1000px){
+  .character-stage .selection-main{grid-template-columns:minmax(420px,47%) minmax(0,53%)}
+  .character-stage .roster-panel{padding:22px 18px 16px}
+  .character-stage .roster-grid{height:430px;max-height:430px;grid-auto-rows:140px}
+  .character-stage .fighter-card{min-height:132px}
+  .character-stage .fighter-card strong{font-size:11px}
+  .character-stage .fighter-showcase .character-render{inset:0 39% 0 0!important}
+  .character-stage .fighter-info{right:2.5%;width:35%}
+}
