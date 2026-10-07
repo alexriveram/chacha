@@ -27,7 +27,7 @@ export default function CharacterPreview({fighter,fullStage=false,alignRight=fal
  useEffect(()=>{const state=runtime.current,el=host.current;if(!state||!el)return;const timer=setTimeout(()=>{if(state.model){state.scene.remove(state.model);disposeObject(state.model)}const model=makeFighter(fighter);batchMeshes(model);state.model=model;state.scene.add(model);state.rim.color.set(fighter.accent);
  const theme=(FIGHTER_SCENES[fighter.id]||WORLD_SCENES[fighter.world])?.scene||'city';const painted=PAINTED_WORLDS[theme]||PAINTED_WORLDS.city;
  el.style.backgroundImage=backgroundImage?`url('${backgroundImage}')`:`linear-gradient(0deg,#21122e99,transparent 75%),url('${painted[0]}')`;el.style.backgroundSize=backgroundImage?'cover':'100% 100%,200% 200%';el.style.backgroundPosition=backgroundImage?'center':'center,'+painted[1];
- const h=fighter.height;state.camera.position.set(h*(closeup?.20:.65),h*(closeup?.87:.82),h*(closeup?1.3:fullStage?2.9:2.5));state.camera.lookAt(0,h*(closeup?.67:.54),0);state.frame();},90);return()=>clearTimeout(timer);
+ const h=fighter.height;state.camera.position.set(h*(closeup?.20:fullStage?0:.65),h*(closeup?.87:.82),h*(closeup?1.3:fullStage?2.9:2.5));state.camera.lookAt(0,h*(closeup?.67:fullStage?.40:.54),0);state.frame();},90);return()=>clearTimeout(timer);
  },[fighter,closeup,backgroundImage,fullStage,alignRight]);
  return <><div ref={host} className="character-render" aria-label={`3D preview of ${fighter.name}`}/><button className="preview-framing" onClick={()=>setCloseup(!closeup)} aria-pressed={closeup}>{closeup?'Full fighter ↗':'Face detail ↗'}</button></>;
 }
