@@ -126,6 +126,8 @@ html{scroll-behavior:smooth}.game-home{position:relative}.home-scroll-cue{positi
 .spatial-hero>.spatial-canvas{z-index:1;opacity:0;transition:opacity .45s ease;pointer-events:none}
 .spatial-hero>.spatial-canvas.ready{opacity:1}
 .spatial-hero:after{z-index:2}
+.debrief-spatial{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.debrief-copy>p:first-child{font-size:clamp(20px,2vw,28px);line-height:1.4;font-weight:650}
 @media(prefers-reduced-motion:reduce){.spatial-hero>.spatial-canvas{display:none}}
 
 /* Simplified fighter picker: ranks and nine large portraits on the left, teams on the right. */

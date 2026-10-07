@@ -37,7 +37,23 @@ void main(){
 }
 `;
 
-export default function SpatialHero(){
+type SpatialHeroProps={
+  image?:string;
+  depth?:string;
+  alt?:string;
+  className?:string;
+  strength?:number;
+  eager?:boolean;
+};
+
+export default function SpatialHero({
+  image='/spatial/spatial-image-4k.jpg',
+  depth='/spatial/depth-map.png',
+  alt='A smiling sloth hanging in a bright fantasy forest',
+  className='home-fighter opening-forest',
+  strength=.047,
+  eager=true,
+}:SpatialHeroProps){
   const host=useRef<HTMLDivElement>(null);
   const canvas=useRef<HTMLCanvasElement>(null);
 
@@ -59,21 +75,22 @@ export default function SpatialHero(){
     const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
     const position=gl.getAttribLocation(program,'a_position');gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);
     const pointer=gl.getUniformLocation(program,'u_pointer'),resolution=gl.getUniformLocation(program,'u_resolution');
-    gl.uniform1i(gl.getUniformLocation(program,'u_image'),0);gl.uniform1i(gl.getUniformLocation(program,'u_depth'),1);gl.uniform1f(gl.getUniformLocation(program,'u_strength'),.047);gl.uniform1f(gl.getUniformLocation(program,'u_zoom'),1.07);
+    gl.uniform1i(gl.getUniformLocation(program,'u_image'),0);gl.uniform1i(gl.getUniformLocation(program,'u_depth'),1);gl.uniform1f(gl.getUniformLocation(program,'u_strength'),strength);gl.uniform1f(gl.getUniformLocation(program,'u_zoom'),1.07);
 
-    let stopped=false,visible=true,raf=0,targetX=0,targetY=0,currentX=0,currentY=0,textures:WebGLTexture[]=[];
+    let stopped=false,visible=false,loading=false,loaded=false,raf=0,releaseTimer=0,targetX=0,targetY=0,currentX=0,currentY=0,textures:WebGLTexture[]=[];
     const resize=()=>{const rect=el.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.35),width=Math.max(1,Math.round(rect.width*dpr)),height=Math.max(1,Math.round(rect.height*dpr));if(node.width!==width||node.height!==height){node.width=width;node.height=height;gl.viewport(0,0,width,height);gl.uniform2f(resolution,width,height)}};
-    const draw=()=>{raf=0;if(stopped||!visible||document.hidden)return;resize();currentX+=(targetX-currentX)*.075;currentY+=(targetY-currentY)*.075;gl.uniform2f(pointer,currentX,currentY);gl.drawArrays(gl.TRIANGLES,0,6);if(Math.abs(targetX-currentX)+Math.abs(targetY-currentY)>.002)raf=requestAnimationFrame(draw)};
-    const requestDraw=()=>{if(!raf&&!stopped)raf=requestAnimationFrame(draw)};
+    const draw=()=>{raf=0;if(stopped||!visible||!loaded||document.hidden)return;resize();currentX+=(targetX-currentX)*.075;currentY+=(targetY-currentY)*.075;gl.uniform2f(pointer,currentX,currentY);gl.drawArrays(gl.TRIANGLES,0,6);if(Math.abs(targetX-currentX)+Math.abs(targetY-currentY)>.002)raf=requestAnimationFrame(draw)};
+    const requestDraw=()=>{if(!raf&&!stopped&&loaded)raf=requestAnimationFrame(draw)};
     const move=(event:PointerEvent)=>{const rect=el.getBoundingClientRect();targetX=Math.max(-1,Math.min(1,(event.clientX-rect.left)/rect.width*2-1));targetY=Math.max(-1,Math.min(1,-((event.clientY-rect.top)/rect.height*2-1)));requestDraw()};
     const tilt=(event:DeviceOrientationEvent)=>{if(event.gamma==null||event.beta==null)return;targetX=Math.max(-1,Math.min(1,event.gamma/24));targetY=Math.max(-1,Math.min(1,(event.beta-45)/30));requestDraw()};
-    const load=(url:string,unit:number)=>new Promise<WebGLTexture>((resolve,reject)=>{const texture=gl.createTexture(),image=new Image();if(!texture){reject(new Error('Texture unavailable'));return}image.onload=()=>{gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);resolve(texture)};image.onerror=()=>reject(new Error(`Could not load ${url}`));image.src=url});
-    const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible)requestDraw()},{threshold:.02});observer.observe(el);
+    const load=(url:string,unit:number)=>new Promise<WebGLTexture>((resolve,reject)=>{const texture=gl.createTexture(),source=new Image();if(!texture){reject(new Error('Texture unavailable'));return}source.onload=()=>{gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,source);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);resolve(texture)};source.onerror=()=>{gl.deleteTexture(texture);reject(new Error(`Could not load ${url}`))};source.src=url});
+    const loadAssets=()=>{if(loading||loaded||stopped)return;loading=true;Promise.all([load(image,0),load(depth,1)]).then(values=>{loading=false;if(stopped){values.forEach(value=>gl.deleteTexture(value));return}textures=values;loaded=true;node.classList.add('ready');requestDraw()}).catch(error=>{loading=false;console.warn('Spatial hero assets unavailable',error)})};
+    const releaseAssets=()=>{if(!loaded)return;textures.forEach(value=>gl.deleteTexture(value));textures=[];loaded=false;node.classList.remove('ready')};
+    const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible){if(releaseTimer)window.clearTimeout(releaseTimer);loadAssets();requestDraw()}else if(loaded){releaseTimer=window.setTimeout(()=>{if(!visible&&!stopped)releaseAssets()},1500)}},{threshold:.02});observer.observe(el);
     const onResize=()=>requestDraw();
     window.addEventListener('pointermove',move,{passive:true});window.addEventListener('deviceorientation',tilt,true);window.addEventListener('resize',onResize,{passive:true});
-    Promise.all([load('/spatial/spatial-image-4k.jpg',0),load('/spatial/depth-map.png',1)]).then(values=>{if(stopped){values.forEach(value=>gl.deleteTexture(value));return}textures=values;node.classList.add('ready');requestDraw()}).catch(error=>console.warn('Spatial hero assets unavailable',error));
-    return()=>{stopped=true;if(raf)cancelAnimationFrame(raf);observer.disconnect();window.removeEventListener('pointermove',move);window.removeEventListener('deviceorientation',tilt,true);window.removeEventListener('resize',onResize);textures.forEach(value=>gl.deleteTexture(value));if(buffer)gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.deleteShader(vertex);gl.deleteShader(fragment)};
-  },[]);
+    return()=>{stopped=true;if(raf)cancelAnimationFrame(raf);if(releaseTimer)window.clearTimeout(releaseTimer);observer.disconnect();window.removeEventListener('pointermove',move);window.removeEventListener('deviceorientation',tilt,true);window.removeEventListener('resize',onResize);releaseAssets();if(buffer)gl.deleteBuffer(buffer);gl.deleteProgram(program);gl.deleteShader(vertex);gl.deleteShader(fragment)};
+  },[image,depth,strength]);
 
-  return <div ref={host} className="home-fighter opening-forest spatial-hero"><img src="/spatial/spatial-image-4k.jpg" alt="A smiling sloth hanging in a bright fantasy forest" fetchPriority="high"/><canvas ref={canvas} className="spatial-canvas" aria-hidden="true"/></div>;
+  return <div ref={host} className={`${className} spatial-hero`}><img src={image} alt={alt} fetchPriority={eager?'high':undefined} loading={eager?'eager':'lazy'}/><canvas ref={canvas} className="spatial-canvas" aria-hidden="true"/></div>;
 }
