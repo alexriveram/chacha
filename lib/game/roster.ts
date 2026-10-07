@@ -95,6 +95,23 @@ const descriptions:Record<MoveKind,string>={strike:'Close-range hit in front of 
 function move(s:string,ult=false):Move {const [name,kind]=s.split(':') as [string,MoveKind];return {name,kind,cooldown:ult?12:kind==='flight'?28:kind==='heal'?12:kind==='shield'?10:kind==='stun'?8:5,description:descriptions[kind]};}
 export const ROSTER:Fighter[]=data.map(([name,world,tier,color,accent,model,height,m1,m2,u])=>{const rank=TIERS.indexOf(tier);return {id:name.toLowerCase().replace(/[^a-z0-9]+/g,'-'),name,world,tier,color,accent,model,height,skin:['Jon Jones','The Rock'].includes(name)?'#95694e':'#d9b18f',fly:m1.endsWith(':flight')||m2.endsWith(':flight'),moves:[move(m1),move(m2)],ult:move(u,true),hp:[150,210,285,370,490,620][rank]+(height>3?100:0),damage:[14,19,26,34,45,58][rank],speed:(name==='Flash'?13:name==='Sonic'||name==='Shadow'?11:height>4?5.5:7),range:world==='WWE'||world==='MMA'?3.7:5};});
 export const FIGHTERS=Object.fromEntries(ROSTER.map(c=>[c.id,c])) as Record<string,Fighter>;
+const signature:Record<string,Move>={
+ superman:{name:'Heat Vision',kind:'beam',cooldown:.55,description:'Twin beams fired from Superman’s eyes.'},
+ goku:{name:'Kamehameha',kind:'beam',cooldown:.7,description:'A focused ki wave.'},
+ naruto:{name:'Rasengan',kind:'beam',cooldown:.65,description:'A spinning blue chakra sphere launched toward the target.'},
+ 'iron-man':{name:'Repulsor',kind:'beam',cooldown:.5,description:'A rapid armor repulsor shot.'},
+ 'spider-man':{name:'Web Shot',kind:'beam',cooldown:.45,description:'A fast web projectile.'},
+ thor:{name:'Mjolnir',kind:'beam',cooldown:.7,description:'Throw Mjolnir toward the target.'},
+ godzilla:{name:'Atomic Breath',kind:'beam',cooldown:.9,description:'A focused atomic energy beam.'},
+ gojo:{name:'Blue',kind:'pull',cooldown:.8,description:'A compressed cursed-energy sphere.'},
+ sukuna:{name:'Dismantle',kind:'beam',cooldown:.55,description:'A fast invisible cutting slash.'},
+ 'darth-vader':{name:'Saber Throw',kind:'beam',cooldown:.7,description:'Throw the lightsaber toward the target.'},
+ mario:{name:'Fireball',kind:'beam',cooldown:.55,description:'Throw a bouncing fireball.'}
+};
+const ultimateOverride:Record<string,Move>={superman:{name:'Solar Overload',kind:'blast',cooldown:12,description:'Release stored solar energy in a massive burst.'},goku:{name:'Spirit Bomb',kind:'blast',cooldown:12,description:'Detonate a huge sphere of gathered energy.'}};
+export function fighterPrimary(c:Fighter):Move{return signature[c.id]||c.moves.find(m=>m.kind==='beam')||c.moves.find(m=>m.kind==='strike')||c.moves[0]}
+export function fighterPower(c:Fighter):Move{const primary=fighterPrimary(c);return c.moves.find(m=>m.name!==primary.name&&['flight','shield','heal','dash','pull','stun','switch'].includes(m.kind))||c.moves.find(m=>m.name!==primary.name)||c.moves[0]}
+export function fighterUltimate(c:Fighter):Move{return ultimateOverride[c.id]||c.ult}
 export const WORLDS=Array.from(new Set(ROSTER.map(c=>c.world)));
 export const WORLD_SCENES:Record<string,{name:string;scene:string}>={Marvel:{name:'Avengers Tower',scene:'manhattan'},DC:{name:'Gotham Skyline',scene:'gotham'},'Star Wars':{name:'Death Star Hangar',scene:'deathstar'},Naruto:{name:'Hidden Leaf Village',scene:'leaf'},'Jujutsu Kaisen':{name:'Shibuya Crossing',scene:'shibuya'},'Kung Fu Panda':{name:'Jade Palace',scene:'jade'},Avatar:{name:'Fire Nation Palace',scene:'palace'},TMNT:{name:'NYC Sewers',scene:'sewer'},Mario:{name:'Mushroom Kingdom',scene:'mushroom'},Sonic:{name:'Green Hill Zone',scene:'greenhill'},Transformers:{name:'Cybertron',scene:'cybertron'},MonsterVerse:{name:'Titan City',scene:'city'},Invincible:{name:'Guardians Skyline',scene:'metropolis'},'Attack on Titan':{name:'Wall Maria',scene:'wall'},'Dragon Ball':{name:'World Tournament',scene:'tournament'},'God of War':{name:'Lake of Nine',scene:'ruins'},'Journey to the West':{name:'Flower Fruit Mountain',scene:'jade'},WWE:{name:'WrestleMania',scene:'ring'},MMA:{name:'The Octagon',scene:'ring'},'Punch-Out':{name:'World Circuit',scene:'ring'}};
 export const FIGHTER_SCENES:Partial<Record<string,{name:string;scene:string}>>={
