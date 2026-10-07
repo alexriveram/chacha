@@ -380,7 +380,7 @@ export function addPaintedFace(rig:T.Group,c:Fighter,lowDetail=false){
  const rx=robot?.181:lowDetail?(animal?.168:.137):oogway?.151:animal?.181:covered?.181:.131;
  const ry=robot?.199:lowDetail?(animal?.202:.162):oogway?.126:animal?.177:covered?.195:.168;
  const rz=robot?.095:lowDetail?(animal?.160:.129):oogway?.223:animal?.160:covered?.181:.122;
- const segments=lowDetail?12:24,rows=lowDetail?12:24;
+ const segments=lowDetail?16:28,rows=lowDetail?16:28;
  const geometry=new T.PlaneGeometry(2,2,segments,rows),p=geometry.attributes.position;
  for(let i=0;i<p.count;i++){
   const u=p.getX(i),v=p.getY(i),ellipse=Math.sqrt(Math.max(.001,1-v*v));
@@ -395,7 +395,9 @@ export function addPaintedFace(rig:T.Group,c:Fighter,lowDetail=false){
   nz+=nose+brow;p.setXYZ(i,nx,ny,nz);
  }
  geometry.computeVertexNormals();
- const material=new T.MeshBasicMaterial({map:paint(c),toneMapped:false});
+ // Light the portrait map with the rest of the model.  The old unlit material
+ // looked like a flat sticker even though the face geometry was curved.
+ const material=new T.MeshStandardMaterial({map:paint(c),roughness:robot?.34:.72,metalness:robot?.36:0,toneMapped:true,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
  const face=new T.Mesh(geometry,material);face.name='painted-face-'+c.id;
  face.position.set(0,lowDetail?1.58:oogway?1.72:robot?1.62:covered?1.60:1.62,robot?.198:oogway?.050:.002);
  face.renderOrder=1;rig.add(face);

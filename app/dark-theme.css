@@ -87,3 +87,19 @@ body,.launch{background:#09090b;color:#f4f4f5}.launch:before{background:none}.la
 .character-stage .power-list{margin-top:26px}.character-stage .power-list small,.character-stage .power-list em{display:none}.character-stage .power-list>div{padding:8px 0;border:0}
 .character-stage .deploy-row{padding-top:12px;border-top:1px solid #ffffff12}.character-stage .fighter-launch>span,.character-stage .fighter-launch>small{display:none}
 .character-stage .team-picker{gap:4px}.character-stage .team-picker button{font-size:10px;padding:7px}
+
+/* Large 3x3 console-style fighter roster. */
+@media(min-width:1001px){
+  .character-stage .selection-main{grid-template-columns:minmax(500px,36%) minmax(0,64%)}
+  .character-stage .roster-panel{padding:24px 22px 18px}
+  .character-stage .roster-grid{height:448px;max-height:448px;min-height:0;flex:none;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:144px;overflow-y:auto}
+  .character-stage .fighter-card{min-height:132px;aspect-ratio:1/1;padding:10px}
+  .character-stage .fighter-portrait{inset:0;width:100%;height:100%;object-fit:contain;object-position:center 38%}
+  .character-stage .fighter-card strong{margin-top:auto;font-size:12px;z-index:2;text-shadow:0 2px 6px #000}
+}
+@media(min-width:1500px) and (min-height:900px){
+  .character-stage .selection-main{grid-template-columns:minmax(610px,37%) minmax(0,63%)}
+  .character-stage .roster-grid{height:536px;max-height:536px;grid-auto-rows:176px}
+  .character-stage .fighter-card{min-height:166px}
+  .character-stage .fighter-card strong{font-size:13px}
+}

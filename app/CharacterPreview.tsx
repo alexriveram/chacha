@@ -14,8 +14,10 @@ const PAINTED_WORLDS:Record<string,[string,string]>={
 export default function CharacterPreview({fighter,fullStage=false,alignRight=false,backgroundImage}:{fighter:Fighter;fullStage?:boolean;alignRight?:boolean;backgroundImage?:string}){
  const host=useRef<HTMLDivElement>(null),runtime=useRef<{renderer:T.WebGLRenderer;scene:T.Scene;camera:T.PerspectiveCamera;model:T.Group|null;rim:T.DirectionalLight;frame:()=>void}|null>(null);
  const [closeup,setCloseup]=useState(!fullStage);
- useEffect(()=>{const el=host.current;if(!el)return;let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({antialias:false,alpha:true,powerPreference:'low-power'})}catch{return}
- renderer.setPixelRatio(Math.min(devicePixelRatio,1));renderer.toneMapping=T.ACESFilmicToneMapping;el.appendChild(renderer.domElement);
+ useEffect(()=>{const el=host.current;if(!el)return;let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance',stencil:false})}catch{return}
+ // Only one showcase canvas is visible, so it can spend more pixels on faces
+ // without affecting the much heavier 24-player match renderer.
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;el.appendChild(renderer.domElement);
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(34,1,.1,150);scene.add(new T.HemisphereLight('#eaf3ff','#485064',3));const key=new T.DirectionalLight('#fff1da',4);key.position.set(4,9,7);scene.add(key);const rim=new T.DirectionalLight('#fff',3);rim.position.set(-4,4,-3);scene.add(rim);
  const resize=()=>{renderer.setSize(el.clientWidth,el.clientHeight,false);camera.aspect=el.clientWidth/el.clientHeight;camera.setViewOffset(el.clientWidth,el.clientHeight,fullStage&&alignRight&&el.clientWidth>800?el.clientWidth*-.19:0,0,el.clientWidth,el.clientHeight);camera.updateProjectionMatrix()};resize();const ro=new ResizeObserver(resize);ro.observe(el);
  const state={renderer,scene,camera,model:null as T.Group|null,rim,frame:resize};runtime.current=state;let frame=0,last=0,visible=true;const io=new IntersectionObserver(([e])=>{visible=e.isIntersecting});io.observe(el);

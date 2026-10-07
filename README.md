@@ -35,7 +35,8 @@ npm run lint
 ## Controls
 
 - `W`, `A`, `S`, `D`: move
-- Mouse or trackpad: turn the camera and aim
+- Mouse or trackpad: turn the camera
+- Right click: aim over the shoulder
 - Left click or trackpad click: fighter signature attack
 - `E`: fighter power-up
 - `X`: ultimate

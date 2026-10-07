@@ -135,6 +135,36 @@ export function makeCombatFighter(c:Fighter):T.Group{
  if(c.model==='blindfold'){const band=mesh(new T.BoxGeometry(.30,.065,.06),'#0b0e17');band.position.set(0,1.63,.125)}
  if(c.model==='robot'){const glass=mesh(new T.BoxGeometry(.48,.14,.04),'#78ddf1',.65);glass.position.set(0,1.23,.22);const grille=mesh(new T.BoxGeometry(.28,.19,.04),'#c7cdd3',.8);grille.position.set(0,1.03,.23)}
  if(c.model==='tortoise'){const neck=mesh(new T.CapsuleGeometry(.08,.27,3,7),'#afa479');neck.position.set(0,1.44,.02);const shell=mesh(new T.SphereGeometry(.34,12,8),'#514a37');shell.position.set(0,1,-.18);shell.scale.set(.92,1.1,.45)}
+ // Silhouette kit for match LODs.  These pieces are deliberately broad and
+ // character-specific so fighters stay recognizable at gameplay distance.
+ if(c.model==='plumber'){
+  const cap=mesh(new T.SphereGeometry(.19,10,6),c.color);cap.position.set(0,1.76,0);cap.scale.y=.55;
+  const brim=mesh(new T.BoxGeometry(.34,.045,.22),c.color);brim.position.set(0,1.72,.12);
+ }
+ if(c.model==='hedgehog')for(let i=0;i<5;i++){const spike=mesh(new T.ConeGeometry(.12,.38,6),c.color);spike.position.set((i-2)*.07,1.64-i*.045,-.20);spike.rotation.x=-1.2;spike.rotation.z=(i-2)*.16}
+ if(['panda','leopard','lion','tiger','rat','monkey','fox','ape'].includes(c.model))for(const side of [-1,1]){const ear=mesh(new T.SphereGeometry(.085,8,6),c.model==='panda'?'#20252c':c.color);ear.position.set(side*.17,1.75,0)}
+ if(['turtle','bowser'].includes(c.model)){
+  const shell=mesh(new T.SphereGeometry(.34,12,8),c.model==='bowser'?'#4d8447':'#516d47');shell.position.set(0,1,-.19);shell.scale.set(1,1.18,.48);
+  const band=mesh(new T.BoxGeometry(.38,.075,.055),c.accent);band.position.set(0,1.64,.16);
+ }
+ if(c.model==='yoda')for(const side of [-1,1]){const ear=mesh(new T.ConeGeometry(.09,.43,6),skin);ear.position.set(side*.27,1.62,0);ear.rotation.z=side*-Math.PI/2}
+ if(['bat','claws'].includes(c.model))for(const side of [-1,1]){const ear=mesh(new T.ConeGeometry(.065,.28,5),c.color);ear.position.set(side*.12,1.84,0)}
+ if(c.model==='vader'){const helmet=mesh(new T.ConeGeometry(.25,.36,8),'#11151c',.65);helmet.position.set(0,1.75,-.02);const chest=mesh(new T.BoxGeometry(.24,.21,.05),'#363d48',.7);chest.position.set(0,1.04,.22)}
+ if(c.model==='armor'){const core=mesh(new T.CylinderGeometry(.075,.075,.025,12),'#baf7ff',.4);core.position.set(0,1.13,.225);core.rotation.x=Math.PI/2}
+ if(c.model==='kaiju'){
+  for(let i=0;i<5;i++){const fin=mesh(new T.ConeGeometry(.09,.31,5),c.accent);fin.position.set(0,.83+i*.17,-.24);fin.rotation.x=-.82}
+  const tail=mesh(new T.ConeGeometry(.16,.9,7),c.color);tail.position.set(0,.57,-.47);tail.rotation.x=-1.18;
+ }
+ if(['jedi','vader','maul','swordsman','scout','ninja','blades','turtle'].includes(c.model)){
+  const weapon=mesh(new T.CylinderGeometry(.022,.022,.86,6),['jedi','vader','maul'].includes(c.model)?c.accent:'#d7e0e5');weapon.position.set(.32,.92,.14);weapon.rotation.z=-.24;
+ }
+ if(c.name==='Thor'){
+  const handle=mesh(new T.CylinderGeometry(.025,.025,.56,6),'#6f5643');handle.position.set(.32,.91,.12);handle.rotation.z=-.18;
+  const hammer=mesh(new T.BoxGeometry(.31,.18,.18),'#a9b4bd',.7);hammer.position.set(.37,1.18,.10);
+ }
+ if(c.name==='Spider-Man'){
+  const emblem=mesh(new T.SphereGeometry(.045,7,5),'#111a28');emblem.position.set(0,1.13,.235);emblem.scale.set(.75,1.45,.35);
+ }
  addPaintedFace(rig,c,true);g.scale.setScalar(c.height/1.95);g.userData={rig,legs,arms,head,height:c.height};return g;
 }
 type LegPose={rest:T.Vector3;rotation:T.Euler;bounds:T.Box3;length:number};
@@ -202,6 +232,13 @@ export function animateFighter(g:T.Group,time:number,moving:number,attack=false,
  const groundMove=pose.moving*(1-pose.air);
  const compression=Math.sin(pose.phase*2)**2*.007*groundMove;
  rig.position.copy(pose.restRig);rig.position.y+=pose.floor-compression;
+ // A small weight shift keeps the rig planted while preserving aim-facing.
+ // It is intentionally subtle: the camera and hit direction stay independent
+ // from the walk cycle, as in an over-the-shoulder action shooter.
+ const bodyPitch=attack?-.055:pose.air?-.10:.022*groundMove;
+ const bodyRoll=Math.sin(pose.phase)*.018*groundMove;
+ rig.rotation.x+=(bodyPitch-rig.rotation.x)*(1-Math.exp(-dt*16));
+ rig.rotation.z+=(bodyRoll-rig.rotation.z)*(1-Math.exp(-dt*12));
  for(let i=0;i<2;i++){
   const leg=legs[i],rest=pose.legs[i],phase=(pose.phase+i*Math.PI)%(Math.PI*2);
   // First half of each step is planted; only the recovery foot lifts. The

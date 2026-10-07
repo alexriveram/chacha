@@ -7,8 +7,8 @@ import "./game-menu.css";
 import "./dark-theme.css";
 
 export const metadata: Metadata = {
-  title: "Chacha",
-  description: "Four teams. Three worlds. Own the hill. Play Chacha with friends from any device.",
+  title: "ChaCha",
+  description: "Four teams. Three worlds. Own the hill. Play ChaCha with friends from any device.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

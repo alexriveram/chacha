@@ -1,9 +1,6 @@
-"use client";
-import {useEffect,useState} from 'react';
 import {ROSTER} from '@/lib/game/roster';
-const cache:Record<string,string>={};
-// One portrait per idle slice; leaving the collection cancels all pending work.
-export function usePortraits(enabled:boolean){const [portraits,setPortraits]=useState<Record<string,string>>({...cache});useEffect(()=>{if(!enabled)return;let alive=true,cleanup=()=>{};void(async()=>{const T=await import('three');const {makeFighter}=await import('@/lib/game/models');const {batchMeshes,disposeObject}=await import('@/lib/game/rendering');if(!alive)return;let renderer:InstanceType<typeof T.WebGLRenderer>;try{renderer=new T.WebGLRenderer({antialias:false,alpha:true,preserveDrawingBuffer:true,powerPreference:'low-power'})}catch{return}renderer.setSize(144,144);renderer.setPixelRatio(1);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;const scene=new T.Scene();scene.add(new T.HemisphereLight('#edf1ff','#39274d',3));const sun=new T.DirectionalLight('#fff4ec',4);sun.position.set(3,5,5);scene.add(sun);const camera=new T.PerspectiveCamera(30,1,.01,100);let timer:ReturnType<typeof setTimeout>,idle:number|undefined,index=0;const idleWindow=window as Window&{requestIdleCallback?:(cb:()=>void,opts:{timeout:number})=>number;cancelIdleCallback?:(id:number)=>void};
-cleanup=()=>{clearTimeout(timer);if(idle!==undefined)idleWindow.cancelIdleCallback?.(idle);renderer.dispose();renderer.forceContextLoss()};
-const schedule=()=>{timer=setTimeout(()=>{if(!alive)return;if(idleWindow.requestIdleCallback)idle=idleWindow.requestIdleCallback(draw,{timeout:300});else draw()},40)};
-const draw=()=>{if(!alive)return;if(document.hidden){schedule();return}while(index<ROSTER.length&&cache[ROSTER[index].id])index++;if(index>=ROSTER.length){setPortraits({...cache});cleanup();cleanup=()=>{};return}const fighter=ROSTER[index++],model=makeFighter(fighter);batchMeshes(model);scene.add(model);const h=fighter.height;camera.position.set(h*.10,h*.85,h*.83);camera.lookAt(0,h*.765,0);renderer.render(scene,camera);cache[fighter.id]=renderer.domElement.toDataURL('image/webp',.85);scene.remove(model);disposeObject(model);if(index%4===0)setPortraits({...cache});schedule()};setPortraits({...cache});schedule();})();return()=>{alive=false;cleanup()}},[enabled]);return portraits;}
+
+const portraits=Object.fromEntries(ROSTER.map(fighter=>[fighter.id,`/portraits/${fighter.id}.webp`])) as Record<string,string>;
+
+/** Static, locally cached character portraits keep the roster recognizable without creating 81 WebGL scenes. */
+export function usePortraits(enabled:boolean){return enabled?portraits:{}}

@@ -1,0 +1,562 @@
+{
+  "uncle-iroh": {
+    "name": "Uncle Iroh",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Iroh",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/c/c1/Iroh_smiling.png/revision/latest?cb=20130626131914",
+    "title": "Iroh"
+  },
+  "splinter": {
+    "name": "Splinter",
+    "world": "TMNT",
+    "sourcePage": "https://turtlepedia.fandom.com/wiki/Splinter",
+    "imageUrl": "https://static.wikia.nocookie.net/tmnt/images/8/85/Splinter_%28Mirage%29_profile.jpg/revision/latest?cb=20190218175717",
+    "title": "Splinter"
+  },
+  "oogway": {
+    "name": "Oogway",
+    "world": "Kung Fu Panda",
+    "sourcePage": "https://kungfupanda.fandom.com/wiki/Oogway",
+    "imageUrl": "https://static.wikia.nocookie.net/kungfupanda/images/2/2e/Oogway-white.png/revision/latest?cb=20160326153345",
+    "title": "Oogway"
+  },
+  "waluigi": {
+    "name": "Waluigi",
+    "world": "Mario",
+    "sourcePage": "https://www.mariowiki.com/Waluigi",
+    "imageUrl": "https://mario.wiki.gallery/images/2/27/SuperMarioParty_Waluigi.png",
+    "title": "Waluigi"
+  },
+  "silver-surfer": {
+    "name": "Silver Surfer",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Silver_Surfer",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/a/a9/Norrin_Radd_%28Earth-36%29_from_Startling_Stories_Thing_-_Night_Falls_on_Yancy_Street_Vol_1_1_0001.jpg/revision/latest?cb=20130530150839",
+    "title": "Silver Surfer"
+  },
+  "ghost-rider": {
+    "name": "Ghost Rider",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Ghost_Rider",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/6/6e/Ghost_Rider_Vol_10_11_Mobili_Variant_Textless.jpg/revision/latest?cb=20240806004855",
+    "title": "Ghost Rider"
+  },
+  "superman": {
+    "name": "Superman",
+    "world": "DC",
+    "sourcePage": "https://dc.fandom.com/wiki/Kal-El_(New_Earth)",
+    "imageUrl": "https://static.wikia.nocookie.net/marvel_dc/images/1/14/Superman_0002.jpg/revision/latest?cb=20200524231003",
+    "title": "Kal-El (New Earth)"
+  },
+  "goku": {
+    "name": "Goku",
+    "world": "Dragon Ball",
+    "sourcePage": "https://dragonball.fandom.com/wiki/Goku",
+    "imageUrl": "https://static.wikia.nocookie.net/dragonball/images/b/ba/Goku_anime_profile.png/revision/latest?cb=20250723190513",
+    "title": "Goku"
+  },
+  "naruto": {
+    "name": "Naruto",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Naruto_Uzumaki",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/d/d6/Naruto_Part_I.png/revision/latest?cb=20251228135525",
+    "title": "Naruto Uzumaki"
+  },
+  "sasuke": {
+    "name": "Sasuke",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Sasuke_Uchiha",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/2/21/Sasuke_Part_1.png/revision/latest?cb=20170716092103",
+    "title": "Sasuke Uchiha"
+  },
+  "gojo": {
+    "name": "Gojo",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Satoru_Gojo",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/e/ef/Satoru_Gojo_%28Anime_2%29.png/revision/latest?cb=20250726003655",
+    "title": "Satoru Gojo"
+  },
+  "sukuna": {
+    "name": "Sukuna",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Sukuna",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/7/74/Sukuna_%28Volume_29%29.png/revision/latest?cb=20250726003512",
+    "title": "Sukuna"
+  },
+  "thragg": {
+    "name": "Thragg",
+    "world": "Invincible",
+    "sourcePage": "https://amazon-invincible.fandom.com/wiki/Thragg",
+    "imageUrl": "https://static.wikia.nocookie.net/amazon-invincible/images/b/be/GrandRegentThragg-render.png/revision/latest?cb=20260714065038",
+    "title": "Thragg"
+  },
+  "hulk": {
+    "name": "Hulk",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Bruce_Banner_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/e/e9/Hulk_Vol_5_1_Carnivore_Comics_Exclusive_Virgin_Variant.jpg/revision/latest?cb=20211124211653",
+    "title": "Bruce Banner (Earth-616)"
+  },
+  "thor": {
+    "name": "Thor",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Thor_Odinson_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/f/f2/Immortal_Thor_Vol_1_4_D%C3%A1vila_Variant_Textless.jpg/revision/latest?cb=20250614002031",
+    "title": "Thor Odinson (Earth-616)"
+  },
+  "magneto": {
+    "name": "Magneto",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Max_Eisenhardt_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/9/9e/Max_Eisenhardt_%28Earth-616%29_from_X-Men_Vol_7_1_001.jpg/revision/latest?cb=20240710102753",
+    "title": "Max Eisenhardt (Earth-616)"
+  },
+  "professor-x": {
+    "name": "Professor X",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Charles_Xavier_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/4/44/House_of_X_Vol_1_1_Flower_Variant_Textless.jpg/revision/latest?cb=20200514075425",
+    "title": "Charles Xavier (Earth-616)"
+  },
+  "flash": {
+    "name": "Flash",
+    "world": "DC",
+    "sourcePage": "https://dc.fandom.com/wiki/Flash_(Barry_Allen)",
+    "imageUrl": "https://static.wikia.nocookie.net/marvel_dc/images/7/74/Flash_0006.jpg/revision/latest?cb=20120215162619",
+    "title": "Flash (Barry Allen)"
+  },
+  "yoda": {
+    "name": "Yoda",
+    "world": "Star Wars",
+    "sourcePage": "https://starwars.fandom.com/wiki/Yoda",
+    "imageUrl": "https://static.wikia.nocookie.net/starwars/images/d/d6/Yoda_SWSB.png/revision/latest?cb=20150206140125",
+    "title": "Yoda"
+  },
+  "yuji": {
+    "name": "Yuji",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Yuji_Itadori",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/3/35/Yuji_Itadori_%28Anime_4%29.png/revision/latest?cb=20251230155050",
+    "title": "Yuji Itadori"
+  },
+  "invincible": {
+    "name": "Invincible",
+    "world": "Invincible",
+    "sourcePage": "https://amazon-invincible.fandom.com/wiki/Invincible",
+    "imageUrl": "https://static.wikia.nocookie.net/amazon-invincible/images/a/a3/Invincible_%28Mark_Grayson%29.png/revision/latest?cb=20260714054306",
+    "title": "Invincible"
+  },
+  "levi": {
+    "name": "Levi",
+    "world": "Attack on Titan",
+    "sourcePage": "https://attackontitan.fandom.com/wiki/Levi_Ackerman",
+    "imageUrl": "https://static.wikia.nocookie.net/shingekinokyojin/images/9/94/Levi_Ackerman_character_image.png/revision/latest?cb=20210410135001",
+    "title": "Levi Ackerman"
+  },
+  "kratos": {
+    "name": "Kratos",
+    "world": "God of War",
+    "sourcePage": "https://godofwar.fandom.com/wiki/Kratos",
+    "imageUrl": "https://static.wikia.nocookie.net/godofwar/images/e/e9/Kratos-_GOW_Ragnarok.png/revision/latest?cb=20230115190836",
+    "title": "Kratos"
+  },
+  "shadow": {
+    "name": "Shadow",
+    "world": "Sonic",
+    "sourcePage": "https://sonic.fandom.com/wiki/Shadow_the_Hedgehog",
+    "imageUrl": "https://static.wikia.nocookie.net/sonic/images/4/45/SRCShadow.png/revision/latest?cb=20251008005300",
+    "title": "Shadow the Hedgehog"
+  },
+  "battle-beast": {
+    "name": "Battle Beast",
+    "world": "Invincible",
+    "sourcePage": "https://amazon-invincible.fandom.com/wiki/Battle_Beast",
+    "imageUrl": "https://static.wikia.nocookie.net/amazon-invincible/images/0/02/Battle_Beast.png/revision/latest?cb=20260505004520",
+    "title": "Battle Beast"
+  },
+  "toji": {
+    "name": "Toji",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Toji_Fushiguro",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/d/db/Toji_Fushiguro_%28Anime%29.png/revision/latest?cb=20250726005401",
+    "title": "Toji Fushiguro"
+  },
+  "darth-vader": {
+    "name": "Darth Vader",
+    "world": "Star Wars",
+    "sourcePage": "https://starwars.fandom.com/wiki/Anakin_Skywalker",
+    "imageUrl": "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png/revision/latest?cb=20130621175844",
+    "title": "Anakin Skywalker"
+  },
+  "luke-skywalker": {
+    "name": "Luke Skywalker",
+    "world": "Star Wars",
+    "sourcePage": "https://starwars.fandom.com/wiki/Luke_Skywalker",
+    "imageUrl": "https://static.wikia.nocookie.net/starwars/images/3/3d/LukeSkywalker.png/revision/latest?cb=20241221010122",
+    "title": "Luke Skywalker"
+  },
+  "itachi": {
+    "name": "Itachi",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Itachi_Uchiha",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/e/e9/Itachi_Child_OL.png/revision/latest?cb=20210415223303",
+    "title": "Itachi Uchiha"
+  },
+  "minato": {
+    "name": "Minato",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Minato_Namikaze",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/e/eb/Minato_Jonin.png/revision/latest?cb=20230510153913",
+    "title": "Minato Namikaze"
+  },
+  "kakashi": {
+    "name": "Kakashi",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Kakashi_Hatake",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/2/27/Kakashi_Hatake.png/revision/latest?cb=20251019002845",
+    "title": "Kakashi Hatake"
+  },
+  "geto": {
+    "name": "Geto",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Suguru_Geto",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/c/c2/Suguru_Geto_%28Prequel_Anime%29.png/revision/latest?cb=20250726004422",
+    "title": "Suguru Geto"
+  },
+  "yuta": {
+    "name": "Yuta",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Yuta_Okkotsu",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/e/e6/Yuta_Okkotsu_%28Anime_2%29.png/revision/latest?cb=20251230155621",
+    "title": "Yuta Okkotsu"
+  },
+  "jogo": {
+    "name": "Jogo",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Jogo",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/2/29/Jogo_%28Anime%29.png/revision/latest?cb=20210109005534",
+    "title": "Jogo"
+  },
+  "omni-man": {
+    "name": "Omni-Man",
+    "world": "Invincible",
+    "sourcePage": "https://amazon-invincible.fandom.com/wiki/Omni-Man",
+    "imageUrl": "https://static.wikia.nocookie.net/amazon-invincible/images/8/8d/Nolan_coalition_fullbod.png/revision/latest?cb=20260510211004",
+    "title": "Omni-Man"
+  },
+  "tai-lung": {
+    "name": "Tai Lung",
+    "world": "Kung Fu Panda",
+    "sourcePage": "https://kungfupanda.fandom.com/wiki/Tai_Lung",
+    "imageUrl": "https://static.wikia.nocookie.net/kungfupanda/images/c/ca/Spirit_Tai_Lung.jpg/revision/latest?cb=20240314201219",
+    "title": "Tai Lung"
+  },
+  "po": {
+    "name": "Po",
+    "world": "Kung Fu Panda",
+    "sourcePage": "https://kungfupanda.fandom.com/wiki/Po",
+    "imageUrl": "https://static.wikia.nocookie.net/kungfupanda/images/2/28/PoXiao.jpg/revision/latest?cb=20261004063324",
+    "title": "Po"
+  },
+  "ozai": {
+    "name": "Ozai",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Ozai",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/4/4a/Ozai.png/revision/latest?cb=20130612170743",
+    "title": "Ozai"
+  },
+  "aang": {
+    "name": "Aang",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Aang",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/a/ae/Aang_at_Jasmine_Dragon.png/revision/latest?cb=20250504214141",
+    "title": "Aang"
+  },
+  "optimus-prime": {
+    "name": "Optimus Prime",
+    "world": "Transformers",
+    "sourcePage": "https://transformers.fandom.com/wiki/Optimus_Prime_(disambiguation)",
+    "imageUrl": "https://static.wikia.nocookie.net/transformers/images/3/37/Optimusg1.jpg/revision/latest?cb=20170218231038",
+    "title": "Optimus Prime (disambiguation)"
+  },
+  "megatron": {
+    "name": "Megatron",
+    "world": "Transformers",
+    "sourcePage": "https://transformers.fandom.com/wiki/Megatron_(G1)",
+    "imageUrl": "https://static.wikia.nocookie.net/transformers/images/7/7a/G1_Megatron.png/revision/latest?cb=20230630013709",
+    "title": "Megatron (G1)"
+  },
+  "godzilla": {
+    "name": "Godzilla",
+    "world": "MonsterVerse",
+    "sourcePage": "https://godzilla.fandom.com/wiki/Godzilla_(MonsterVerse)",
+    "imageUrl": "https://static.wikia.nocookie.net/godzilla/images/e/e8/GXK_Evolved_Godzilla.jpg/revision/latest?cb=20240212194729",
+    "title": "Godzilla (MonsterVerse)"
+  },
+  "kong": {
+    "name": "Kong",
+    "world": "MonsterVerse",
+    "sourcePage": "https://godzilla.fandom.com/wiki/King_Kong_(MonsterVerse)",
+    "imageUrl": "https://static.wikia.nocookie.net/godzilla/images/3/36/GxK-Kong_with_B.E.A.S.T._Glove.png/revision/latest?cb=20240127024937",
+    "title": "King Kong (MonsterVerse)"
+  },
+  "iron-man": {
+    "name": "Iron Man",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Anthony_Stark_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/4/42/Iron_Man_Vol_7_1_Villalobos_Virgin_Variant.jpg/revision/latest?cb=20260128204028",
+    "title": "Anthony Stark (Earth-616)"
+  },
+  "spider-man": {
+    "name": "Spider-Man",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/Peter_Parker_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/7/71/Peter_Parker_%28Earth-616%29_from_Amazing_Spider-Man_Vol_5_15_Cover.jpg/revision/latest?cb=20251003212608",
+    "title": "Peter Parker (Earth-616)"
+  },
+  "wolverine": {
+    "name": "Wolverine",
+    "world": "Marvel",
+    "sourcePage": "https://marvel.fandom.com/wiki/James_Howlett_(Earth-616)",
+    "imageUrl": "https://static.wikia.nocookie.net/marveldatabase/images/3/35/Wolverine_Vol_8_8_Ope%C3%B1a_Virgin_Variant.jpg/revision/latest?cb=20260909095728",
+    "title": "James Howlett (Earth-616)"
+  },
+  "batman": {
+    "name": "Batman",
+    "world": "DC",
+    "sourcePage": "https://dc.fandom.com/wiki/Bruce_Wayne_(New_Earth)",
+    "imageUrl": "https://static.wikia.nocookie.net/marvel_dc/images/9/9d/Batman_003.jpg/revision/latest?cb=20090114064958",
+    "title": "Bruce Wayne (New Earth)"
+  },
+  "darth-maul": {
+    "name": "Darth Maul",
+    "world": "Star Wars",
+    "sourcePage": "https://starwars.fandom.com/wiki/Maul",
+    "imageUrl": "https://static.wikia.nocookie.net/starwars/images/8/89/MaulHS_SWI185.png/revision/latest?cb=20181108061212",
+    "title": "Maul"
+  },
+  "obi-wan": {
+    "name": "Obi-Wan",
+    "world": "Star Wars",
+    "sourcePage": "https://starwars.fandom.com/wiki/Obi-Wan_Kenobi",
+    "imageUrl": "https://static.wikia.nocookie.net/starwars/images/4/4e/ObiWanHS-SWE.jpg/revision/latest?cb=20111115052816",
+    "title": "Obi-Wan Kenobi"
+  },
+  "rock-lee": {
+    "name": "Rock Lee",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Rock_Lee",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/9/97/Rock_Lee_Part_I.png/revision/latest?cb=20181229065526",
+    "title": "Rock Lee"
+  },
+  "gaara": {
+    "name": "Gaara",
+    "world": "Naruto",
+    "sourcePage": "https://naruto.fandom.com/wiki/Gaara",
+    "imageUrl": "https://static.wikia.nocookie.net/naruto/images/2/20/Gaara_in_Part_I.png/revision/latest?cb=20221010023824",
+    "title": "Gaara"
+  },
+  "megumi": {
+    "name": "Megumi",
+    "world": "Jujutsu Kaisen",
+    "sourcePage": "https://jujutsu-kaisen.fandom.com/wiki/Megumi_Fushiguro",
+    "imageUrl": "https://static.wikia.nocookie.net/jujutsu-kaisen/images/6/6e/Megumi_Fushiguro_%28Anime_4%29.png/revision/latest?cb=20251230155327",
+    "title": "Megumi Fushiguro"
+  },
+  "eren": {
+    "name": "Eren",
+    "world": "Attack on Titan",
+    "sourcePage": "https://attackontitan.fandom.com/wiki/Eren_Yeager",
+    "imageUrl": "https://static.wikia.nocookie.net/shingekinokyojin/images/6/69/Eren_Yeager_character_image.png/revision/latest?cb=20200910221354",
+    "title": "Eren Yeager"
+  },
+  "zuko": {
+    "name": "Zuko",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Zuko",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/4/4b/Zuko.png/revision/latest?cb=20180630112142",
+    "title": "Zuko"
+  },
+  "king-bumi": {
+    "name": "King Bumi",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Bumi_(King_of_Omashu)",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/e/e8/King_Bumi.png/revision/latest?cb=20140106141303",
+    "title": "Bumi (King of Omashu)"
+  },
+  "sonic": {
+    "name": "Sonic",
+    "world": "Sonic",
+    "sourcePage": "https://sonic.fandom.com/wiki/Sonic_the_Hedgehog",
+    "imageUrl": "https://static.wikia.nocookie.net/sonic/images/1/10/SRCSonic.png/revision/latest?cb=20251202132714",
+    "title": "Sonic the Hedgehog"
+  },
+  "bumblebee": {
+    "name": "Bumblebee",
+    "world": "Transformers",
+    "sourcePage": "https://transformers.fandom.com/wiki/Bumblebee_TFP",
+    "imageUrl": "https://static.wikia.nocookie.net/transformers/images/3/39/I_can_work_with_that.png/revision/latest?cb=20190726212304",
+    "title": "Bumblebee TFP"
+  },
+  "shredder": {
+    "name": "Shredder",
+    "world": "TMNT",
+    "sourcePage": "https://turtlepedia.fandom.com/wiki/Shredder",
+    "imageUrl": "https://static.wikia.nocookie.net/tmnt/images/9/98/Mirageshredder.jpg/revision/latest?cb=20131016113252",
+    "title": "Shredder"
+  },
+  "mario": {
+    "name": "Mario",
+    "world": "Mario",
+    "sourcePage": "https://www.mariowiki.com/Mario",
+    "imageUrl": "https://mario.wiki.gallery/images/0/0d/MarioAlternateJamboreeRender.png",
+    "title": "Mario"
+  },
+  "bowser": {
+    "name": "Bowser",
+    "world": "Mario",
+    "sourcePage": "https://www.mariowiki.com/Bowser",
+    "imageUrl": "https://mario.wiki.gallery/images/c/c7/SMBW_Artwork_Bowser.png",
+    "title": "Bowser"
+  },
+  "donkey-kong": {
+    "name": "Donkey Kong",
+    "world": "Mario",
+    "sourcePage": "https://www.mariowiki.com/Donkey_Kong",
+    "imageUrl": "https://mario.wiki.gallery/images/6/6e/DKB_Thinking_DK.png",
+    "title": "Donkey Kong"
+  },
+  "little-mac": {
+    "name": "Little Mac",
+    "world": "Punch-Out",
+    "sourcePage": "https://punchout.fandom.com/wiki/Little_Mac",
+    "imageUrl": "https://static.wikia.nocookie.net/punchout/images/c/cf/Little_Mac.png/revision/latest?cb=20250418103403",
+    "title": "Little Mac"
+  },
+  "katara": {
+    "name": "Katara",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Katara",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/7/7a/Katara_smiles_at_coronation.png/revision/latest?cb=20150104171449",
+    "title": "Katara"
+  },
+  "toph": {
+    "name": "Toph",
+    "world": "Avatar",
+    "sourcePage": "https://avatar.fandom.com/wiki/Toph_Beifong",
+    "imageUrl": "https://static.wikia.nocookie.net/avatar/images/4/46/Toph_Beifong.png/revision/latest?cb=20131230122047",
+    "title": "Toph Beifong"
+  },
+  "tails": {
+    "name": "Tails",
+    "world": "Sonic",
+    "sourcePage": "https://sonic.fandom.com/wiki/Miles_%22Tails%22_Prower",
+    "imageUrl": "https://static.wikia.nocookie.net/sonic/images/a/a8/SRCTails.png/revision/latest?cb=20250826092341",
+    "title": "Miles \"Tails\" Prower"
+  },
+  "knuckles": {
+    "name": "Knuckles",
+    "world": "Sonic",
+    "sourcePage": "https://sonic.fandom.com/wiki/Knuckles_the_Echidna",
+    "imageUrl": "https://static.wikia.nocookie.net/sonic/images/2/2c/SRCKnuckles.png/revision/latest?cb=20250826092333",
+    "title": "Knuckles the Echidna"
+  },
+  "amy": {
+    "name": "Amy",
+    "world": "Sonic",
+    "sourcePage": "https://sonic.fandom.com/wiki/Amy_Rose",
+    "imageUrl": "https://static.wikia.nocookie.net/sonic/images/1/12/SRCAmy.png/revision/latest?cb=20250826092335",
+    "title": "Amy Rose"
+  },
+  "leonardo": {
+    "name": "Leonardo",
+    "world": "TMNT",
+    "sourcePage": "https://turtlepedia.fandom.com/wiki/Leonardo",
+    "imageUrl": "https://static.wikia.nocookie.net/tmnt/images/b/bc/Leo_mirage.jpg/revision/latest?cb=20260406130729",
+    "title": "Leonardo"
+  },
+  "raphael": {
+    "name": "Raphael",
+    "world": "TMNT",
+    "sourcePage": "https://turtlepedia.fandom.com/wiki/Raphael",
+    "imageUrl": "https://static.wikia.nocookie.net/tmnt/images/2/20/2509180-turtle123.jpg/revision/latest?cb=20130625150236",
+    "title": "Raphael"
+  },
+  "donatello": {
+    "name": "Donatello",
+    "world": "TMNT",
+    "sourcePage": "https://turtlepedia.fandom.com/wiki/Donatello",
+    "imageUrl": "https://static.wikia.nocookie.net/tmnt/images/a/ac/2500563-turtle124.jpg/revision/latest?cb=20131012192640",
+    "title": "Donatello"
+  },
+  "michelangelo": {
+    "name": "Michelangelo",
+    "world": "TMNT",
+    "sourcePage": "https://turtlepedia.fandom.com/wiki/Michelangelo",
+    "imageUrl": "https://static.wikia.nocookie.net/tmnt/images/9/90/Mike.jpg/revision/latest?cb=20130527152217",
+    "title": "Michelangelo"
+  },
+  "furious-five": {
+    "name": "Furious Five",
+    "world": "Kung Fu Panda",
+    "sourcePage": "https://kungfupanda.fandom.com/wiki/Furious_Five",
+    "imageUrl": "https://static.wikia.nocookie.net/kungfupanda/images/a/a1/Furiousfive.jpg/revision/latest?cb=20190501143705",
+    "title": "Furious Five"
+  },
+  "luigi": {
+    "name": "Luigi",
+    "world": "Mario",
+    "sourcePage": "https://www.mariowiki.com/Luigi",
+    "imageUrl": "https://mario.wiki.gallery/images/7/76/SMPJ_Luigi.png",
+    "title": "Luigi"
+  },
+  "wario": {
+    "name": "Wario",
+    "world": "Mario",
+    "sourcePage": "https://www.mariowiki.com/Wario",
+    "imageUrl": "https://mario.wiki.gallery/images/2/29/SMPWario.png",
+    "title": "Wario"
+  },
+  "john-cena": {
+    "name": "john-cena",
+    "sourcePage": "https://en.wikipedia.org/wiki/John_Cena",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/John_Cena_by_Gage_Skidmore.jpg/330px-John_Cena_by_Gage_Skidmore.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "John Cena"
+  },
+  "jon-jones": {
+    "name": "jon-jones",
+    "sourcePage": "https://en.wikipedia.org/wiki/Jon_Jones",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Jon_Jones_-_Supporting_Brain_Health_Study.jpg/330px-Jon_Jones_-_Supporting_Brain_Health_Study.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Jon Jones"
+  },
+  "sun-wukong": {
+    "name": "sun-wukong",
+    "sourcePage": "https://en.wikipedia.org/wiki/Sun_Wukong",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Xiyou.PNG/330px-Xiyou.PNG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Sun Wukong"
+  },
+  "the-undertaker": {
+    "name": "the-undertaker",
+    "sourcePage": "https://en.wikipedia.org/wiki/The_Undertaker",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/The_Undertaker_US_Marine_Visit_2019_%28cropped%292.jpg/330px-The_Undertaker_US_Marine_Visit_2019_%28cropped%292.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "The Undertaker"
+  },
+  "the-rock": {
+    "name": "the-rock",
+    "sourcePage": "https://en.wikipedia.org/wiki/Dwayne_Johnson",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Dwayne_Johnson-1764_%284x5_cropped_with_moderate_headroom%29.jpg/330px-Dwayne_Johnson-1764_%284x5_cropped_with_moderate_headroom%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Dwayne Johnson"
+  },
+  "rey-mysterio": {
+    "name": "rey-mysterio",
+    "sourcePage": "https://en.wikipedia.org/wiki/Rey_Mysterio",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Rey_Mysterio_at_San_Diego_Comic_Con_2026_%283x4_cropped%29.jpg/330px-Rey_Mysterio_at_San_Diego_Comic_Con_2026_%283x4_cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Rey Mysterio"
+  },
+  "randy-orton": {
+    "name": "randy-orton",
+    "sourcePage": "https://en.wikipedia.org/wiki/Randy_Orton",
+    "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Randy_Orton_RR24_%28cropped%29.jpg/330px-Randy_Orton_RR24_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+    "title": "Randy Orton"
+  }
+}

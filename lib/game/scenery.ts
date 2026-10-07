@@ -27,6 +27,14 @@ function pillar(g:T.Object3D,x:number,y:number,z:number,r1:number,r2:number,h:nu
 function ring(g:T.Object3D,x:number,z:number,inner:number,outer:number,color:string,y=.05){
  const mesh=new T.Mesh(new T.RingGeometry(inner,outer,64),surface(color,.2));mesh.rotation.x=-Math.PI/2;mesh.position.set(x,y,z);g.add(mesh);return mesh;
 }
+function atmosphere(g:T.Group,kind:string){
+ const count=kind==='shibuya'?220:kind==='leaf'?150:110,positions=new Float32Array(count*3);let seed=kind==='leaf'?73:kind==='deathstar'?29:41;
+ const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)|0;return(seed>>>0)/4294967296};
+ for(let i=0;i<count;i++){positions[i*3]=(random()-.5)*100;positions[i*3+1]=1+random()*31;positions[i*3+2]=(random()-.5)*92}
+ const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.BufferAttribute(positions,3));
+ const material=new T.PointsMaterial({color:kind==='leaf'?'#e29a58':kind==='deathstar'?'#a9dded':'#c8dcff',size:kind==='leaf'?.16:kind==='deathstar'?.09:.075,transparent:true,opacity:kind==='shibuya'?.34:.48,depthWrite:false,sizeAttenuation:true});
+ const points=new T.Points(geometry,material);points.name='map-atmosphere';points.userData.kind=kind;points.userData.speed=kind==='shibuya'?17:kind==='leaf'?2.1:.32;g.add(points);
+}
 function pitchedRoof(g:T.Object3D,x:number,y:number,z:number,w:number,d:number,color:string){
  const mesh=new T.Mesh(new T.ConeGeometry(1,1,4),surface(color));mesh.rotation.y=Math.PI/4;mesh.position.set(x,y,z);mesh.scale.set(w*.76,2.8,d*.76);g.add(mesh);
  solid(g,x,y-1.25,z,w*1.09,.28,d*1.09,'#493d3a');
@@ -37,6 +45,20 @@ function canopyTree(g:T.Object3D,x:number,z:number,h:number){
  orb(g,x-1.8,h*.67,z+.7,h*.24,'#77834f',1.15,.8,1);
 }
 const graphicMaterials=new Map<string,T.MeshStandardMaterial>();
+const skyMaterials=new Map<string,T.MeshBasicMaterial>();
+function addSkyDome(scene:T.Scene,kind:string){
+ let material=skyMaterials.get(kind);
+ if(!material){
+  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=512;const c=canvas.getContext('2d')!;
+  const colors=kind==='leaf'?['#7d5470','#ef9b75','#f1c08d']:kind==='deathstar'?['#01040b','#071327','#183153']:['#090b1c','#202950','#684060'];
+  const gradient=c.createLinearGradient(0,0,0,512);if(gradient){gradient.addColorStop(0,colors[0]);gradient.addColorStop(.58,colors[1]);gradient.addColorStop(1,colors[2]);c.fillStyle=gradient}else c.fillStyle=colors[1];c.fillRect(0,0,1024,512);
+  if(kind==='deathstar')for(let i=0;i<520;i++){const x=(i*83)%1024,y=(i*i*19)%390,r=i%17===0?2:1;c.fillStyle=i%23===0?'#a7dfff':'#ffffff';c.globalAlpha=.35+(i%7)*.08;c.fillRect(x,y,r,r)}
+  else if(kind==='leaf'){c.globalAlpha=.18;c.fillStyle='#fff4da';for(let i=0;i<13;i++){c.beginPath();c.ellipse((i*173)%1100,110+(i%4)*54,90+(i%3)*28,16+(i%2)*7,-.08,0,Math.PI*2);c.fill()}c.globalAlpha=1;const sun=c.createRadialGradient(800,290,4,800,290,100);if(sun){sun.addColorStop(0,'#fff6d6');sun.addColorStop(.25,'#ffd093');sun.addColorStop(1,'#ffd09300');c.fillStyle=sun;c.fillRect(690,180,220,220)}}
+  else{c.globalAlpha=.17;for(let i=0;i<16;i++){const glow=c.createRadialGradient((i*97)%1024,350+(i%3)*37,2,(i*97)%1024,350+(i%3)*37,70);if(glow){glow.addColorStop(0,i%2?'#68dfff':'#fd6dca');glow.addColorStop(1,'#00000000');c.fillStyle=glow;c.fillRect((i*97)%1024-70,280,140,150)}}}
+  const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;material=new T.MeshBasicMaterial({map:texture,side:T.BackSide,depthWrite:false,fog:false,toneMapped:false});skyMaterials.set(kind,material);
+ }
+ const sky=new T.Mesh(new T.SphereGeometry(205,32,16),material);sky.name='painted-sky-dome';sky.rotation.y=kind==='leaf'?.8:0;scene.add(sky);
+}
 function graphic(kind:string){
  const cached=graphicMaterials.get(kind);if(cached)return cached;
  const canvas=document.createElement('canvas');canvas.width=512;canvas.height=512;
@@ -133,6 +155,16 @@ function buildCity(g:T.Object3D){
    solid(g,side*51,8.8,z,2.5,.16,.25,'#b6dfef',.8);
   }
  }
+ // Recognizable crossing hardware: suspended direction boards, signals and
+ // luminous vertical signs.  They remain outside the playable curb line.
+ for(const z of [-43,43]){
+  solid(g,0,9,z,64,.18,.18,'#39475a');
+  for(const x of [-24,0,24]){panel(g,x,10,z+(z<0?.12:-.12),12,3,x===0?'crossing':'night',z<0?0:Math.PI);solid(g,x-6,8,z,.16,4,.16,'#39475a')}
+ }
+ for(const side of [-1,1])for(const z of [-30,0,30]){
+  solid(g,side*48,4.4,z,.24,8,.24,'#313b49');
+  for(let i=0;i<3;i++)orb(g,side*47.82,6.7-i*.65,z,.18,[ '#ef4b5d','#e7bd56','#56d88a'][i],.6,1,.35);
+ }
 }
 function buildHangar(g:T.Object3D){
  // Tall enclosing architecture, far above and outside the shared field.
@@ -167,6 +199,13 @@ function buildHangar(g:T.Object3D){
  g.add(new T.Points(stars,new T.PointsMaterial({color:'#e1efff',size:.3,sizeAttenuation:true})));
  orb(g,26,43,-147,23,'#668b9f',1,1,1);
  orb(g,20,47,-130,12,'#9db6bd',1.2,.45,.35);
+ // Overhead gantries and runway emitters sell the scale without obstructing
+ // ground combat or adding collision checks.
+ for(const z of [-42,42]){
+  solid(g,0,17,z,96,.55,.65,'#536273');
+  for(let x=-44;x<=44;x+=11){solid(g,x,12,z,.22,10,.22,'#435263');orb(g,x,16.55,z+.42,.19,x%22?'#e75c63':'#a8ddf0',1,.4,1)}
+ }
+ for(const side of [-1,1])for(let z=-32;z<=32;z+=8){solid(g,side*46,.12,z,3,.05,.22,'#8bdff0',1)}
 }
 function hokageFace(g:T.Object3D,x:number,y:number,z:number,index:number){
  orb(g,x,y,z,4.2,'#b29579',.85,1.3,.5);
@@ -212,13 +251,22 @@ function buildLeaf(g:T.Object3D){
  pillar(g,37,18.2,-54,8,8,.7,'#ccaa7c',16);
  const dome=pillar(g,37,21,-54,0,9,5,'#916450',16);dome.rotation.y=.2;
  for(let x=-90;x<=90;x+=30)orb(g,x,15,-121,28,'#7c8864',1.4,.75,1);
+ // Village festival details frame the arena: lantern lines, banners and the
+ // elevated gate silhouette all read from the third-person camera.
+ for(const z of [-43,43]){
+  solid(g,0,8.4,z,96,.09,.09,'#4d4038');
+  for(let x=-42;x<=42;x+=7){pillar(g,x,7.8,z,.22,.3,.72,x%14?'#d96e4f':'#e6b657',10);solid(g,x,8.1,z,.36,.08,.36,'#5d473c')}
+ }
+ for(const side of [-1,1])for(const z of [-28,0,28]){solid(g,side*48,5,z,.12,9,.12,'#59473c');panel(g,side*47.9,6,z,2.5,5,side>0?'sunrise':'night',-side*Math.PI/2)}
 }
 export function buildScenery(scene:T.Scene,mapId:string){
  mapId=MAPS.find(m=>m.id===mapId)?.id||MAPS[0].id;
  const leaf=mapId==='leaf',hangar=mapId==='deathstar';
  scene.background=new T.Color(leaf?'#dfb28c':hangar?'#07111f':'#181e36');
  scene.fog=new T.Fog(scene.background,100,220);
+ addSkyDome(scene,mapId);
  const g=new T.Group();g.name='battlefield-scenery';scene.add(g);
+ atmosphere(g,mapId);
  solid(g,0,-.28,0,104,.5,96,leaf?'#b99b78':hangar?'#445260':'#303947');
  addDetailedFloor(g,mapId);
  if(mapId==='shibuya'){
