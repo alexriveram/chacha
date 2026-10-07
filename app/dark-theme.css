@@ -120,6 +120,14 @@ html{scroll-behavior:smooth}.game-home{position:relative}.home-scroll-cue{positi
 @media(max-width:700px){.home-scroll-cue{bottom:14px;width:max-content;max-width:90vw}.debrief-copy{margin:0 auto;padding:80px 0 100px}.debrief-copy h2{letter-spacing:-3px}.debrief-shade{background:linear-gradient(0deg,#050706f7 0%,#050706c4 55%,#05070655)}.game-debrief>img{object-position:60% center}.debrief-up{right:24px;bottom:18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.home-scroll-cue span{animation:none}}
 
+/* Depth-aware 4K opening artwork. The still image remains as a no-WebGL fallback. */
+.spatial-hero>img,.spatial-hero>.spatial-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.spatial-hero>img{object-fit:cover;object-position:center}
+.spatial-hero>.spatial-canvas{z-index:1;opacity:0;transition:opacity .45s ease;pointer-events:none}
+.spatial-hero>.spatial-canvas.ready{opacity:1}
+.spatial-hero:after{z-index:2}
+@media(prefers-reduced-motion:reduce){.spatial-hero>.spatial-canvas{display:none}}
+
 /* Simplified fighter picker: ranks and nine large portraits on the left, teams on the right. */
 .character-stage .tier-filters{margin:20px 0 16px;opacity:.82}
 .character-stage .side-team-picker{margin-top:30px;padding-top:20px;border-top:1px solid #ffffff18}
