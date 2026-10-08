@@ -5,7 +5,7 @@ import {Fighter,FIGHTER_SCENES,WORLD_SCENES} from '@/lib/game/roster';
 import {makeFighter,animateFighter} from '@/lib/game/models';
 import {batchMeshes,disposeObject} from '@/lib/game/rendering';
 const PAINTED_WORLDS:Record<string,[string,string]>={
- shibuya:['/arena-atlas.png','0% 0%'],deathstar:['/arena-atlas.png','100% 0%'],leaf:['/arena-atlas.png','0% 100%'],jade:['/arena-atlas.png','100% 100%'],
+ shibuya:['/arena-atlas-painted-v1.png','0% 0%'],deathstar:['/arena-atlas-painted-v1.png','100% 0%'],leaf:['/arena-atlas-painted-v1.png','0% 100%'],jade:['/arena-atlas-painted-v1.png','100% 100%'],
  manhattan:['/world-atlas-city.jpg','0% 0%'],metropolis:['/world-atlas-city.jpg','0% 0%'],centralcity:['/world-atlas-city.jpg','0% 0%'],city:['/world-atlas-city.jpg','0% 0%'],mansion:['/world-atlas-city.jpg','0% 0%'],gotham:['/world-atlas-city.jpg','100% 0%'],genosha:['/world-atlas-city.jpg','100% 0%'],ring:['/world-atlas-city.jpg','0% 100%'],palace:['/world-atlas-city.jpg','100% 100%'],
  sewer:['/world-atlas-classic.jpg','0% 0%'],dojo:['/world-atlas-classic.jpg','0% 0%'],mushroom:['/world-atlas-classic.jpg','100% 0%'],greenhill:['/world-atlas-classic.jpg','0% 100%'],cybertron:['/world-atlas-classic.jpg','100% 100%'],reactor:['/world-atlas-classic.jpg','100% 100%'],
  wall:['/world-atlas-epic.jpg','0% 0%'],tournament:['/world-atlas-epic.jpg','100% 0%'],ruins:['/world-atlas-epic.jpg','0% 100%'],jungle:['/world-atlas-epic.jpg','100% 100%'],forest:['/world-atlas-epic.jpg','100% 100%'],swamp:['/world-atlas-epic.jpg','100% 100%'],titan:['/world-atlas-epic.jpg','100% 100%'],
